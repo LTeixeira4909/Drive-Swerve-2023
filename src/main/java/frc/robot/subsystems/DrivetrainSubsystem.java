@@ -29,14 +29,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     Joystick js0 = new Joystick(0);
 
-    TalonFX driveMotor = new TalonFX(5);
+    TalonFX driveMotor = new TalonFX(7);
  
-    TalonFX turnMotor = new TalonFX(6);
+    TalonFX turnMotor = new TalonFX(8);
     
-    CANCoder enc = new CANCoder(3);
+    CANCoder enc = new CANCoder(4);
     
     public DrivetrainSubsystem() {
-        turnMotor.configFactoryDefault();
+        turnMotor.configFactoryDefault();                                                                                                                                                                                                                                                                                                                  
 
         // set motor encoder to 0 when robot code starts
         turnMotor.setSelectedSensorPosition(0);
