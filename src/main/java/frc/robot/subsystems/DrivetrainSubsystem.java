@@ -41,7 +41,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // set motor encoder to 0 when robot code starts
         turnMotor.setSelectedSensorPosition(0);
         turnMotor.setInverted(true);
-        driveMotor.setInverted(true);
+        // driveMotor.setInverted(true);
 
         turnMotor.config_kP(0, 0.2);
         turnMotor.config_kI(0, 0);
@@ -72,33 +72,33 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public void DriveWithJoystick(Joystick js) {
 
-        double x = js.getRawAxis(0);
+        double leftRightDir = -1 * js.getRawAxis(0);
 
-        double y = js.getRawAxis(1);
+        double fwdBackDir = -1 * js.getRawAxis(1);
 
         double z = js.getRawAxis(2);
 
-        if (-0.1 < x && x < 0.1) {
-            x = 0;
+        if (-0.1 < leftRightDir && leftRightDir < 0.1) {
+            leftRightDir = 0;
         }
 
-        if (-0.1 < y && y < 0.1) {
-            y = 0;
+        if (-0.1 < fwdBackDir && fwdBackDir < 0.1) {
+            fwdBackDir = 0;
         }
 
         if (-0.1 < z && z < 0.1) {
             z = 0;
         }
 
-        SmartDashboard.putNumber("x number", x);
+        SmartDashboard.putNumber("leftRightDir number", leftRightDir);
 
-        SmartDashboard.putNumber("Y number", y);
+        SmartDashboard.putNumber("fwdBackDir number", fwdBackDir);
 
         SmartDashboard.putNumber("Z number", z);
         // Example chassis speeds: 1 meter per second forward, 3 meters
         // per second to the left, and rotation at 1.5 radians per second
         // counteclockwise.
-        ChassisSpeeds speeds = new ChassisSpeeds(y, x, z);
+        ChassisSpeeds speeds = new ChassisSpeeds(fwdBackDir, leftRightDir, z);
 
         // Convert to module states
         SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
