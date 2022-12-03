@@ -52,13 +52,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         // driveMotor.setInverted(true);
 
-        turnMotorfl.config_kP(0, 0.2);
-        turnMotorfl.config_kI(0, 0);
-        turnMotorfl.config_kD(0, 0.1);
+        double turnMotorKp = .2;
+        double turnMotorKI = 0;
+        double turnMotorKD = 0.1;
 
-        turnMotorfr.config_kP(0, 0.2);
-        turnMotorfr.config_kI(0, 0);
-        turnMotorfr.config_kD(0, 0.1);
+        turnMotorfl.config_kP(0, turnMotorKp);
+        turnMotorfl.config_kI(0, turnMotorKI);
+        turnMotorfl.config_kD(0, turnMotorKD);
+
+        turnMotorfr.config_kP(0, turnMotorKp);
+        turnMotorfr.config_kI(0, turnMotorKI);
+        turnMotorfr.config_kD(0, turnMotorKD);
 
         driveMotorfr.setInverted(true);
 
