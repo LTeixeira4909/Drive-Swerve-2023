@@ -37,17 +37,27 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     TalonFX driveMotorfr = new TalonFX(2);
 
-    CANCoder enc = new CANCoder(4);
+    CANCoder encfl = new CANCoder(4);
+
+    CANCoder encfr = new CANCoder(1);
 
     public DrivetrainSubsystem() {
+
+        encfl.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
+        // encfl.setPosition(0);
+
+        encfr.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
+        // encfr.setPosition(0);
+
+
         turnMotorfl.configFactoryDefault();
 
         turnMotorfr.configFactoryDefault();
         // set motor encoder to 0 when robot code starts
-        turnMotorfl.setSelectedSensorPosition(0);
+        turnMotorfl.setSelectedSensorPosition(convertDegreesToTicks( encfl.getPosition()));
         turnMotorfl.setInverted(true);
 
-        turnMotorfr.setSelectedSensorPosition(0);
+        turnMotorfr.setSelectedSensorPosition(convertDegreesToTicks( encfr.getPosition()));
         turnMotorfr.setInverted(true);
 
         // driveMotor.setInverted(true);
@@ -64,10 +74,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         turnMotorfr.config_kI(0, turnMotorKI);
         turnMotorfr.config_kD(0, turnMotorKD);
 
-        driveMotorfr.setInverted(true);
+        // driveMotorfr.setInverted(true);
 
-        enc.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
-        enc.setPosition(0);
+        
 
     }
 
@@ -139,7 +148,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         driveMotorfl.set(ControlMode.PercentOutput, frontLeft.speedMetersPerSecond);
 
-        driveMotorfr.set(ControlMode.PercentOutput, frontLeft.speedMetersPerSecond);
+        driveMotorfr.set(ControlMode.PercentOutput, frontRight.speedMetersPerSecond);
         // frontLeft.angle.getDegrees();
 
         double desiredDegrees = frontLeft.angle.getDegrees();
@@ -149,7 +158,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         turnMotorfl.set(ControlMode.Position, desiredTicks);
 
-        turnMotorfr.set(ControlMode.Position, desiredTicks);
+        turnMotorfr.set(ControlMode.Position, convertDegreesToTicks(frontRight.angle.getDegrees()) );
         // SmartDashboard.putNumber("PID Error", turnMotor.getClosedLoopError());
 
         // turnMotor.set(ControlMode.PercentOutput, .5);
@@ -170,7 +179,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Actual degrees", actualDegrees);
         SmartDashboard.putNumber("Actual ticks", actualTicks);
 
-        SmartDashboard.putNumber("encoder degrees", enc.getPosition());
+        SmartDashboard.putNumber("encoder degrees", encfl.getPosition());
 
         // SmartDashboard.putString("enc this is the error", enc.getLastError().name());
 
