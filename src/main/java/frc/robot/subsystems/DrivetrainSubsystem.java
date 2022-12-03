@@ -29,25 +29,38 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     Joystick js0 = new Joystick(0);
 
-    TalonFX driveMotor = new TalonFX(7);
+    TalonFX driveMotorfl = new TalonFX(7);
 
-    TalonFX turnMotor = new TalonFX(8);
+    TalonFX turnMotorfl = new TalonFX(8);
+
+    TalonFX turnMotorfr = new TalonFX(1);
+
+    TalonFX driveMotorfr = new TalonFX(2);
 
     CANCoder enc = new CANCoder(4);
 
     public DrivetrainSubsystem() {
-        turnMotor.configFactoryDefault();
+        turnMotorfl.configFactoryDefault();
 
+        turnMotorfr.configFactoryDefault();
         // set motor encoder to 0 when robot code starts
-        turnMotor.setSelectedSensorPosition(0);
-        turnMotor.setInverted(true);
+        turnMotorfl.setSelectedSensorPosition(0);
+        turnMotorfl.setInverted(true);
+
+        turnMotorfr.setSelectedSensorPosition(0);
+        turnMotorfr.setInverted(true);
+
         // driveMotor.setInverted(true);
 
-        turnMotor.config_kP(0, 0.2);
-        turnMotor.config_kI(0, 0);
-        turnMotor.config_kD(0, 0.1);
+        turnMotorfl.config_kP(0, 0.2);
+        turnMotorfl.config_kI(0, 0);
+        turnMotorfl.config_kD(0, 0.1);
 
-        // turnMotor.selec
+        turnMotorfr.config_kP(0, 0.2);
+        turnMotorfr.config_kI(0, 0);
+        turnMotorfr.config_kD(0, 0.1);
+
+        driveMotorfr.setInverted(true);
 
         enc.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
         enc.setPosition(0);
@@ -60,13 +73,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public double convertTicksToDegrees(double ticks) {
-        double degrees = ticks * (1.0 / 2048.0) * (1.0 / (150/7)) * (360.0 / 1.0);
+        double degrees = ticks * (1.0 / 2048.0) * (1.0 / (150 / 7)) * (360.0 / 1.0);
         return degrees;
     }
 
     public double convertDegreesToTicks(double degrees) {
 
-        double ticks = degrees * 1 / ((1.0 / 2048.0) * (1.0 / (150/7)) * (360.0 / 1.0));
+        double ticks = degrees * 1 / ((1.0 / 2048.0) * (1.0 / (150 / 7)) * (360.0 / 1.0));
         return ticks;
     }
 
@@ -104,10 +117,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
         SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
 
         // Front left module state
-        SwerveModuleState frontLeft = moduleStates[0]; // SwerveModuleState.optimize(moduleStates[0], new Rotation2d(enc.getPosition()));;
+        SwerveModuleState frontLeft = moduleStates[0]; // SwerveModuleState.optimize(moduleStates[0], new
+                                                       // Rotation2d(enc.getPosition()));;
 
         // Front right module state
-        // SwerveModuleState frontRight = moduleStates[1];
+        SwerveModuleState frontRight = moduleStates[1];
 
         // Back left module state
         // SwerveModuleState backLeft = moduleStates[2];
@@ -119,8 +133,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         SmartDashboard.putNumber("front left heading", frontLeft.angle.getDegrees());
 
-        driveMotor.set(ControlMode.PercentOutput, frontLeft.speedMetersPerSecond);
+        driveMotorfl.set(ControlMode.PercentOutput, frontLeft.speedMetersPerSecond);
 
+        driveMotorfr.set(ControlMode.PercentOutput, frontLeft.speedMetersPerSecond);
         // frontLeft.angle.getDegrees();
 
         double desiredDegrees = frontLeft.angle.getDegrees();
@@ -128,7 +143,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("Desired degrees", desiredDegrees);
         SmartDashboard.putNumber("Desired ticks", desiredTicks);
 
-        turnMotor.set(ControlMode.Position, desiredTicks);
+        turnMotorfl.set(ControlMode.Position, desiredTicks);
+
+        turnMotorfr.set(ControlMode.Position, desiredTicks);
         // SmartDashboard.putNumber("PID Error", turnMotor.getClosedLoopError());
 
         // turnMotor.set(ControlMode.PercentOutput, .5);
@@ -137,10 +154,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         // t2.getSelectedSensorPosition()
 
-        // SmartDashboard.putNumber("actual tick function", convertDegreesToTicks(frontLeft.angle.getDegrees()));
+        // SmartDashboard.putNumber("actual tick function",
+        // convertDegreesToTicks(frontLeft.angle.getDegrees()));
 
-        double actualTicks = turnMotor.getSelectedSensorPosition();
+        double actualTicks = turnMotorfl.getSelectedSensorPosition();
         double actualDegrees = convertTicksToDegrees(actualTicks);
+
+        // double actualTicks = turnMotorfr.getSelectedSensorPosition();
+        // double actualDegrees = convertTicksToDegrees(actualTicks);
 
         SmartDashboard.putNumber("Actual degrees", actualDegrees);
         SmartDashboard.putNumber("Actual ticks", actualTicks);
