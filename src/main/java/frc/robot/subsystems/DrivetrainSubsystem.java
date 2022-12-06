@@ -44,13 +44,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     int counter = 0;
 
-    Module leftModule = new Module(7,8,4);
+    Module leftModule = new Module(7, 8, 4);
 
-    Module rightModule = new Module(1,2,1);
+    Module rightModule = new Module(1, 2, 1);
 
-    Module backRightModule = new Module(4,3,2);
+    Module backRightModule = new Module(4, 3, 2);
 
-    Module backLeftModule = new Module(6,5,3);
+    Module backLeftModule = new Module(6, 5, 3);
 
     public DrivetrainSubsystem() {
 
@@ -143,30 +143,29 @@ public class DrivetrainSubsystem extends SubsystemBase {
         SwerveModuleState frontRight = moduleStates[1];
         SwerveModuleState backRight = moduleStates[3];
         SwerveModuleState backLeft = moduleStates[2];
-        
+
         leftModule.setModuleState(frontLeft);
 
         rightModule.setModuleState(frontRight);
-        
+
         backRightModule.setModuleState(backRight);
-        
+
         backLeftModule.setModuleState(backLeft);
-        
-        
-        
+
         // if (fwdBackDir != 0 || leftRightDir != 0) {
-        //     // before optimized
-            SmartDashboard.putNumber("before optimized speed", frontLeft.speedMetersPerSecond);
-            
-            SmartDashboard.putNumber("before optimized heading", frontLeft.angle.getDegrees());
-           
-            // if (counter++ % 100 == 0)
-            //     frontLeft = SwerveModuleState.optimize(frontLeft, new Rotation2d(encfl.getPosition()));
-        //     // after optimized
-           
-            SmartDashboard.putNumber("after optimized speed", frontLeft.speedMetersPerSecond);
-        
-            SmartDashboard.putNumber("after optimized heading", frontLeft.angle.getDegrees());
+        // // before optimized
+        SmartDashboard.putNumber("before optimized speed", frontLeft.speedMetersPerSecond);
+
+        SmartDashboard.putNumber("before optimized heading", frontLeft.angle.getDegrees());
+
+        // if (counter++ % 100 == 0)
+        // frontLeft = SwerveModuleState.optimize(frontLeft, new
+        // Rotation2d(encfl.getPosition()));
+        // // after optimized
+
+        SmartDashboard.putNumber("after optimized speed", frontLeft.speedMetersPerSecond);
+
+        SmartDashboard.putNumber("after optimized heading", frontLeft.angle.getDegrees());
         // }
 
         // Front right module state
