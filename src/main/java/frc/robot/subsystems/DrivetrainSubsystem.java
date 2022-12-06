@@ -44,7 +44,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     int counter = 0;
 
-    Module VV = new Module();
+    Module leftModule = new Module(7,8,4);
+
+    Module rightModule = new Module(1,2,1);
+
+    Module backRightModule = new Module(4,3,2);
+
+    Module backLeftModule = new Module(6,5,3);
 
     public DrivetrainSubsystem() {
 
@@ -134,8 +140,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         // Front left module state
         SwerveModuleState frontLeft = moduleStates[0];
+        SwerveModuleState frontRight = moduleStates[1];
+        SwerveModuleState backRight = moduleStates[3];
+        SwerveModuleState backLeft = moduleStates[2];
+        
+        leftModule.setModuleState(frontLeft);
 
-        VV.setModuleState(frontLeft);
+        rightModule.setModuleState(frontRight);
+        
+        backRightModule.setModuleState(backRight);
+        
+        backLeftModule.setModuleState(backLeft);
+        
+        
+        
         // if (fwdBackDir != 0 || leftRightDir != 0) {
         //     // before optimized
             SmartDashboard.putNumber("before optimized speed", frontLeft.speedMetersPerSecond);
@@ -152,7 +170,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // }
 
         // Front right module state
-        SwerveModuleState frontRight = moduleStates[1];
+        // SwerveModuleState frontRight = moduleStates[1];
 
         // Back left module state
         // SwerveModuleState backLeft = moduleStates[2];

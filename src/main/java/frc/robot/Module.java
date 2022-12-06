@@ -9,37 +9,43 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class Module {
-    TalonFX driveMotorfl = new TalonFX(7);
+    TalonFX driveMotor;
 
-    TalonFX turnMotorfl = new TalonFX(8);
+    TalonFX turnMotor;
 
-    CANCoder encfl = new CANCoder(4);
+    CANCoder enc;
 
-    public Module() {
-        turnMotorfl.configFactoryDefault();
+    public Module(int driveMotorCanId, int turnMotorCanId, int encoderCanId) {
+        driveMotor = new TalonFX(driveMotorCanId);
+        
+        turnMotor = new TalonFX(turnMotorCanId);
+
+        enc = new CANCoder(encoderCanId);
+        
+        turnMotor.configFactoryDefault();
          // set motor encoder to 0 when robot code starts
-         turnMotorfl.setSelectedSensorPosition(DrivetrainSubsystem.convertDegreesToTicks(encfl.getPosition()));
-         turnMotorfl.setInverted(true);
+         turnMotor.setSelectedSensorPosition(DrivetrainSubsystem.convertDegreesToTicks(enc.getPosition()));
+         turnMotor.setInverted(true);
 
          double turnMotorKp = .2;
          double turnMotorKI = 0;
          double turnMotorKD = 0.1;
  
-         turnMotorfl.config_kP(0, turnMotorKp);
-         turnMotorfl.config_kI(0, turnMotorKI);
-         turnMotorfl.config_kD(0, turnMotorKD);
+         turnMotor.config_kP(0, turnMotorKp);
+         turnMotor.config_kI(0, turnMotorKI);
+         turnMotor.config_kD(0, turnMotorKD);
     
-         driveMotorfl.setInverted(true);
+         driveMotor.setInverted(true);
 
-         encfl.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
-        encfl.setPosition(0);
+         enc.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
+        enc.setPosition(0);
 
     
         }
         public void setModuleState(SwerveModuleState state){
-            driveMotorfl.set(ControlMode.PercentOutput, state.speedMetersPerSecond);
+            driveMotor.set(ControlMode.PercentOutput, state.speedMetersPerSecond);
             
-            turnMotorfl.set(ControlMode.Position, DrivetrainSubsystem.convertDegreesToTicks(state.angle.getDegrees()));       
+            turnMotor.set(ControlMode.Position, DrivetrainSubsystem.convertDegreesToTicks(state.angle.getDegrees()));       
             
         }
 
