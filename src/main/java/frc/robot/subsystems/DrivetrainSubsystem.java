@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Module;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     private static DrivetrainSubsystem instance = null;
@@ -43,6 +44,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     int counter = 0;
 
+    Module VV = new Module();
+
     public DrivetrainSubsystem() {
 
         // encfl.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
@@ -63,9 +66,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         // driveMotor.setInverted(true);
 
-        // double turnMotorKp = .2;
-        // double turnMotorKI = 0;
-        // double turnMotorKD = 0.1;
+        double turnMotorKp = .2;
+        double turnMotorKI = 0;
+        double turnMotorKD = 0.1;
 
         // turnMotorfl.config_kP(0, turnMotorKp);
         // turnMotorfl.config_kI(0, turnMotorKI);
@@ -132,6 +135,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // Front left module state
         SwerveModuleState frontLeft = moduleStates[0];
 
+        VV.setModuleState(frontLeft);
         // if (fwdBackDir != 0 || leftRightDir != 0) {
         //     // before optimized
             SmartDashboard.putNumber("before optimized speed", frontLeft.speedMetersPerSecond);
