@@ -5,7 +5,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 public class Module {
@@ -15,7 +17,11 @@ public class Module {
 
     CANCoder enc;
 
+    int encoderCanId;
+
     public Module(int driveMotorCanId, int turnMotorCanId, int encoderCanId) {
+        this.encoderCanId = encoderCanId;
+
         driveMotor = new TalonFX(driveMotorCanId);
 
         turnMotor = new TalonFX(turnMotorCanId);
@@ -23,6 +29,7 @@ public class Module {
         enc = new CANCoder(encoderCanId);
 
         turnMotor.configFactoryDefault();
+        driveMotor.configFactoryDefault();
         // set motor encoder to 0 when robot code starts
         turnMotor.setSelectedSensorPosition(DrivetrainSubsystem.convertDegreesToTicks(enc.getPosition()));
         turnMotor.setInverted(true);
@@ -38,14 +45,19 @@ public class Module {
         driveMotor.setInverted(true);
 
         enc.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
-        enc.setPosition(0);
+        // enc.setPosition(0);
 
     }
 
-    public void setModuleState(SwerveModuleState state) {
-        driveMotor.set(ControlMode.PercentOutput, state.speedMetersPerSecond);
+    public void setModuleState(SwerveModuleState desiredState) {
 
-        turnMotor.set(ControlMode.Position, DrivetrainSubsystem.convertDegreesToTicks(state.angle.getDegrees()));
+        SmartDashboard.putNumber("canCoder "+encoderCanId, enc.getPosition());
+
+        // desiredState = SwerveModuleState.optimize(desiredState, new Rotation2d(enc.getPosition()));
+
+        driveMotor.set(ControlMode.PercentOutput, desiredState.speedMetersPerSecond);
+
+        turnMotor.set(ControlMode.Position, DrivetrainSubsystem.convertDegreesToTicks(desiredState.angle.getDegrees()));
 
     }
 

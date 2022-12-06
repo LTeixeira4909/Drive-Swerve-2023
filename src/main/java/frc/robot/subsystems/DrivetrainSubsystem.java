@@ -159,8 +159,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         SmartDashboard.putNumber("before optimized heading", frontLeft.angle.getDegrees());
 
         // if (counter++ % 100 == 0)
-        // frontLeft = SwerveModuleState.optimize(frontLeft, new
-        // Rotation2d(encfl.getPosition()));
+        // frontLeft = SwerveModuleState.optimize(frontLeft, new Rotation2d(encfl.getPosition()));
         // // after optimized
 
         SmartDashboard.putNumber("after optimized speed", frontLeft.speedMetersPerSecond);
