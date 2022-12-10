@@ -72,9 +72,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public void DriveWithJoystick(Joystick js) {
 
-        double leftRightDir = -1 * js.getRawAxis(0);
-        double fwdBackDir = -1 * js.getRawAxis(1);
-        double z = js.getRawAxis(2);
+        double leftRightDir = -1 * js.getRawAxis(0); // positive number means left
+        double fwdBackDir = -1 * js.getRawAxis(1); // positive number means fwd
+        double turn = -1 * js.getRawAxis(4); // positive number means clockwise
 
         if (-0.1 < leftRightDir && leftRightDir < 0.1) {
             leftRightDir = 0;
@@ -84,14 +84,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
             fwdBackDir = 0;
         }
 
-        if (-0.1 < z && z < 0.1) {
-            z = 0;
+        if (-0.1 < turn && turn < 0.1) {
+            turn = 0;
         }
 
         // Example chassis speeds: 1 meter per second forward, 3 meters
         // per second to the left, and rotation at 1.5 radians per second
         // counteclockwise.
-        ChassisSpeeds speeds = new ChassisSpeeds(fwdBackDir, leftRightDir, z);
+        ChassisSpeeds speeds = new ChassisSpeeds(fwdBackDir, leftRightDir, turn);
 
         // Convert to module states
         SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
