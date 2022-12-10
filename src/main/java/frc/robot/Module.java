@@ -67,9 +67,9 @@ public class Module {
         SmartDashboard.putNumber(name + " Cancoder", enc.getPosition());
         SmartDashboard.putNumber(name + " turnMotor", DrivetrainSubsystem.convertTicksToDegrees(turnMotor.getSelectedSensorPosition()));
         
-        SmartDashboard.putNumber(name + " Heading", desiredState.angle.getDegrees());
+        desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(enc.getPosition()));
         
-        // desiredState = SwerveModuleState.optimize(desiredState, new Rotation2d(enc.getPosition()));
+        SmartDashboard.putNumber(name + " Heading", desiredState.angle.getDegrees());
 
         driveMotor.set(ControlMode.PercentOutput, desiredState.speedMetersPerSecond);
         turnMotor.set(ControlMode.Position, DrivetrainSubsystem.convertDegreesToTicks(desiredState.angle.getDegrees()));
