@@ -13,11 +13,12 @@ import frc.robot.Module;
 public class DrivetrainSubsystem extends SubsystemBase {
     private static DrivetrainSubsystem instance = null;
 
+    double wheelBase = 31.625 * 0.0254;
     // Locations for the swerve drive modules relative to the robot center.
-    Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
-    Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
-    Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
-    Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
+    Translation2d m_frontLeftLocation = new Translation2d(wheelBase, wheelBase);
+    Translation2d m_frontRightLocation = new Translation2d(wheelBase, -wheelBase);
+    Translation2d m_backLeftLocation = new Translation2d(-wheelBase, wheelBase);
+    Translation2d m_backRightLocation = new Translation2d(-wheelBase, -wheelBase);
 
     // Creating my kinematics object using the module locations
     SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
@@ -35,30 +36,31 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     ShuffleboardTab drivetrainTab;
 
-    public DrivetrainSubsystem(){}
+    public DrivetrainSubsystem() {
+    }
 
     // private DrivetrainSubsystem() {
-    //     drivetrainTab = Shuffleboard.getTab("drivetrain");
+    // drivetrainTab = Shuffleboard.getTab("drivetrain");
 
     // }
 
     // public static DrivetrainSubsystem getInstance() {
-    //     if (instance == null) {
-    //         instance = new DrivetrainSubsystem();
-    //     }
-    //     return instance;
+    // if (instance == null) {
+    // instance = new DrivetrainSubsystem();
+    // }
+    // return instance;
     // }
 
     // public ShuffleboardTab getTab() {
-    //     return drivetrainTab;
+    // return drivetrainTab;
     // }
 
+    // this is alled every loop of the scheduler (~20ms)
     @Override
     public void periodic() {
         DriveWithJoystick(js0);
     }
 
-    
     public static double convertTicksToDegrees(double ticks) {
         double degrees = ticks * (1.0 / 2048.0) * (1.0 / (150 / 7)) * (360.0 / 1.0);
         return degrees;
@@ -76,16 +78,26 @@ public class DrivetrainSubsystem extends SubsystemBase {
         double fwdBackDir = -1 * js.getRawAxis(1); // positive number means fwd
         double turn = -1 * js.getRawAxis(4); // positive number means clockwise
 
-        if (-0.1 < leftRightDir && leftRightDir < 0.1) {
+        double deadband = .05;
+
+        if (-deadband < leftRightDir && leftRightDir < deadband) {
             leftRightDir = 0;
         }
 
-        if (-0.1 < fwdBackDir && fwdBackDir < 0.1) {
+        if (-deadband < fwdBackDir && fwdBackDir < deadband) {
             fwdBackDir = 0;
         }
 
-        if (-0.1 < turn && turn < 0.1) {
+        if (-deadband < turn && turn < deadband) {
             turn = 0;
+        }
+
+        // button 8 on xbox is three lines button
+        if (js.getRawButton(8)) {
+            leftModule.resetTurnEncoders();
+            rightModule.resetTurnEncoders();
+            backRightModule.resetTurnEncoders();
+            backLeftModule.resetTurnEncoders();
         }
 
         // Example chassis speeds: 1 meter per second forward, 3 meters

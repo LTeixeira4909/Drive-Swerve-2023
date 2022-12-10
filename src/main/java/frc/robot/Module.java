@@ -31,7 +31,7 @@ public class Module {
         enc = new CANCoder(encoderCanId);
 
         enc.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
-        enc.setPosition(0);
+      
 
         double initialOffset = 0;
         int maxRetryCount = 500;
@@ -54,7 +54,7 @@ public class Module {
         turnMotor.config_kI(0, turnMotorKI);
         turnMotor.config_kD(0, turnMotorKD);
 
-        driveMotor.setInverted(true);
+        driveMotor.setInverted(false);
 
         
 
@@ -75,5 +75,8 @@ public class Module {
         turnMotor.set(ControlMode.Position, DrivetrainSubsystem.convertDegreesToTicks(desiredState.angle.getDegrees()));
 
     }
-
+    public void resetTurnEncoders () {
+        enc.setPosition(0);
+        turnMotor.setSelectedSensorPosition(DrivetrainSubsystem.convertDegreesToTicks(0));
+    }
 }
