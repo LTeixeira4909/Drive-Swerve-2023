@@ -11,6 +11,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Module;
 
@@ -44,10 +45,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SlewRateLimiter leftRightRateLimiter = new SlewRateLimiter(0.5);
     SlewRateLimiter turnRateLimiter = new SlewRateLimiter(0.5);
 
-    Pigeon2 Pigeon = new Pigeon2(1);
+    Pigeon2 Pigeon = new Pigeon2(20);
 
 
     public DrivetrainSubsystem() {
+        Pigeon.setYaw(0);
+
     }
 
     // private DrivetrainSubsystem() {
@@ -89,10 +92,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         double fwdBackDir = -1 * js.getRawAxis(1); // positive number means fwd
         double turn = -1 * js.getRawAxis(4); // positive number means clockwise
 
-        // fwdBackDir = fwdBakRateLimiter.calculate(fwdBackDir);
-        // leftRightDir = leftRightRateLimiter.calculate(leftRightDir);
+        fwdBackDir = fwdBakRateLimiter.calculate(fwdBackDir);
+        leftRightDir = leftRightRateLimiter.calculate(leftRightDir);
 
-        // turn = turnRateLimiter.calculate(turn);
+        turn = turnRateLimiter.calculate(turn);
         
         double deadband = .05;
 
@@ -119,10 +122,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // Example chassis speeds: 1 meter per second forward, 3 meters
         // per second to the left, and rotation at 1.5 radians per second
         // counteclockwise.
-    //   ChassisSpeeds speeds = new ChassisSpeeds(fwdBackDir, leftRightDir, turn);
+        // ChassisSpeeds speeds = new ChassisSpeeds(fwdBackDir, leftRightDir, turn);
+
+        SmartDashboard.putNumber("Pidgeon yaw", Pigeon.getYaw());
+        SmartDashboard.putNumber("Pidgeon heading", Pigeon.getCompassHeading());
         
-         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-             fwdBackDir, leftRightDir, turn, Rotation2d.fromDegrees(0));
+        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(fwdBackDir, leftRightDir, turn, Rotation2d.fromDegrees(Pigeon.getYaw()));
     
     
         // Convert to module states
