@@ -83,6 +83,19 @@ public class Module {
         turnMotor.set(ControlMode.Position, DrivetrainSubsystem.convertDegreesToTicks(desiredState.angle.getDegrees()));
 
     }
+    
+
+    public SwerveModuleState getState() {
+
+        double speedTicksPer100microSeconds = driveMotor.getSelectedSensorPosition();
+
+        double speedMetersPerSecond = speedTicksPer100microSeconds * (1_000_000 / 1) * (1 / 2048) * (1 / 6.75) * (Math.PI / 1) * (.0254 / 1);
+
+
+        return new SwerveModuleState(speedMetersPerSecond, Rotation2d.fromDegrees(enc.getPosition()));
+        
+        
+    }
     public void resetTurnEncoders () {
         enc.setPosition(0);
         turnMotor.setSelectedSensorPosition(DrivetrainSubsystem.convertDegreesToTicks(0));
