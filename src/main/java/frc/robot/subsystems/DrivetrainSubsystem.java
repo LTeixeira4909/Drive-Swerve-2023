@@ -45,7 +45,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SlewRateLimiter leftRightRateLimiter = new SlewRateLimiter(0.5);
     SlewRateLimiter turnRateLimiter = new SlewRateLimiter(0.5);
 
-    Pigeon2 Pigeon = new Pigeon2(20);
+    Pigeon2 Pigeon = new Pigeon2(20, "CANivore1");
 
 
     public DrivetrainSubsystem() {
@@ -118,6 +118,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
             backRightModule.resetTurnEncoders();
             backLeftModule.resetTurnEncoders();
         }
+        // button 7 on xbox it two squares
+        if (js.getRawButton(7)) {
+            Pigeon.setYaw(0);
+        }
 
         // Example chassis speeds: 1 meter per second forward, 3 meters
         // per second to the left, and rotation at 1.5 radians per second
@@ -125,7 +129,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // ChassisSpeeds speeds = new ChassisSpeeds(fwdBackDir, leftRightDir, turn);
 
         SmartDashboard.putNumber("Pidgeon yaw", Pigeon.getYaw());
-        SmartDashboard.putNumber("Pidgeon heading", Pigeon.getCompassHeading());
         
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(fwdBackDir, leftRightDir, turn, Rotation2d.fromDegrees(Pigeon.getYaw()));
     

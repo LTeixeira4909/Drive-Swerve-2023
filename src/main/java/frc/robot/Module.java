@@ -1,5 +1,7 @@
 package frc.robot;
 
+import javax.sound.sampled.SourceDataLine;
+
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -26,18 +28,24 @@ public class Module {
 
         // this.tab = DrivetrainSubsystem.getInstance().getTab();
 
-        driveMotor = new TalonFX(driveMotorCanId);
-        turnMotor = new TalonFX(turnMotorCanId);
-        enc = new CANCoder(encoderCanId);
+        driveMotor = new TalonFX(driveMotorCanId, "CANivore1");
+        turnMotor = new TalonFX(turnMotorCanId, "CANivore1");
+        enc = new CANCoder(encoderCanId, "CANivore1");
 
         enc.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
       
+        // enc.setStatusFramePeriod(statusFrame, periodMs)
 
         double initialOffset = 0;
         int maxRetryCount = 500;
+        ErrorCode ec;
         do {
             initialOffset = enc.getPosition();
-        } while(enc.getLastError() != ErrorCode.OK && maxRetryCount-- > 0);
+            ec = enc.getLastError();
+            if ( ec != ErrorCode.OK) {
+                System.out.println(name + " -" + enc.getLastError());
+            }
+        } while(ec != ErrorCode.OK && maxRetryCount-- > 0);
         SmartDashboard.putNumber(name + "retrycount", maxRetryCount);
 
         turnMotor.configFactoryDefault();
