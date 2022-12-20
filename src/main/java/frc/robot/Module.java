@@ -33,7 +33,7 @@ public class Module {
         enc = new CANCoder(encoderCanId, "CANivore1");
 
         enc.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
-      
+
         // enc.setStatusFramePeriod(statusFrame, periodMs)
 
         double initialOffset = 0;
@@ -42,10 +42,10 @@ public class Module {
         do {
             initialOffset = enc.getPosition();
             ec = enc.getLastError();
-            if ( ec != ErrorCode.OK) {
+            if (ec != ErrorCode.OK) {
                 System.out.println(name + " -" + enc.getLastError());
             }
-        } while(ec != ErrorCode.OK && maxRetryCount-- > 0);
+        } while (ec != ErrorCode.OK && maxRetryCount-- > 0);
         SmartDashboard.putNumber(name + "retrycount", maxRetryCount);
 
         turnMotor.configFactoryDefault();
@@ -64,8 +64,6 @@ public class Module {
 
         driveMotor.setInverted(false);
 
-        
-
     }
 
     public void setModuleState(SwerveModuleState desiredState) {
@@ -73,30 +71,35 @@ public class Module {
         // tab.add(name + " cancoder", enc.getPosition());
         // tab.add(name + " cancoder", enc.getPosition());
         SmartDashboard.putNumber(name + " Cancoder", enc.getPosition());
-        SmartDashboard.putNumber(name + " turnMotor", DrivetrainSubsystem.convertTicksToDegrees(turnMotor.getSelectedSensorPosition()));
-        
+        SmartDashboard.putNumber(name + " turnMotor",
+                DrivetrainSubsystem.convertTicksToDegrees(turnMotor.getSelectedSensorPosition()));
+
         desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(enc.getPosition()));
-        
+
         SmartDashboard.putNumber(name + " Heading", desiredState.angle.getDegrees());
 
         driveMotor.set(ControlMode.PercentOutput, desiredState.speedMetersPerSecond);
         turnMotor.set(ControlMode.Position, DrivetrainSubsystem.convertDegreesToTicks(desiredState.angle.getDegrees()));
 
     }
-    
 
     public SwerveModuleState getState() {
 
-        double speedTicksPer100microSeconds = driveMotor.getSelectedSensorPosition();
+        // System.out.println("got here!");
 
-        double speedMetersPerSecond = speedTicksPer100microSeconds * (1_000_000 / 1) * (1 / 2048) * (1 / 6.75) * (Math.PI / 1) * (.0254 / 1);
+        double speedTicksPer100miliSeconds = driveMotor.getSelectedSensorVelocity();
 
+        double speedMetersPerSecond = speedTicksPer100miliSeconds * (1 / 100d) * (1_000 / 1d) * (1 / 2048d) * (1 / 6.75)
+                * ((4.0 * Math.PI) / 1d) * (.0254 / 1);
+
+        SmartDashboard.putNumber(name + "St", speedTicksPer100miliSeconds);
+        SmartDashboard.putNumber(name + "Sm", speedMetersPerSecond);
 
         return new SwerveModuleState(speedMetersPerSecond, Rotation2d.fromDegrees(enc.getPosition()));
-        
-        
+
     }
-    public void resetTurnEncoders () {
+
+    public void resetTurnEncoders() {
         enc.setPosition(0);
         turnMotor.setSelectedSensorPosition(DrivetrainSubsystem.convertDegreesToTicks(0));
     }

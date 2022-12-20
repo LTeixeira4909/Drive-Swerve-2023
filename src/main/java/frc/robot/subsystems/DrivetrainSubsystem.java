@@ -94,12 +94,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void periodic() {
 
         // Update the pose
-        m_pose = m_odometry.update(getGyroHeading(), leftModule.getState(), rightModule.getState(),
+        m_odometry.update(getGyroHeading(), leftModule.getState(), rightModule.getState(),
                 backLeftModule.getState(), backRightModule.getState());
 
-        SmartDashboard.putNumber("Pose roation", m_pose.getRotation().getDegrees());
-        SmartDashboard.putNumber("Pose X", m_pose.getX());
-        SmartDashboard.putNumber("Pose Y", m_pose.getY());
+        SmartDashboard.putString("odo", m_odometry.getPoseMeters().toString());
+        SmartDashboard.putString("odo", m_odometry.getPoseMeters().toString());
+        // SmartDashboard.putNumber("Pose roation", m_pose.getRotation().getDegrees()) ;
+        // SmartDashboard.putNumber("Pose X", m_pose.getX());
+        // SmartDashboard.putNumber("Pose Y", m_pose.getY());
 
         DriveWithJoystick(js0);
     }
