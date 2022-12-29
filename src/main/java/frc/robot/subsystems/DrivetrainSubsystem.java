@@ -53,7 +53,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SlewRateLimiter leftRightRateLimiter = new SlewRateLimiter(0.5);
     SlewRateLimiter turnRateLimiter = new SlewRateLimiter(0.5);
 
-    Pigeon2 pigeon = new Pigeon2(0);//, "CANivore1");
+    Pigeon2 pigeon = new Pigeon2(0, "CANivore1");
 
     public Rotation2d getGyroHeading() {
         // // Get my gyro angle. We are negating the value because gyros return positive

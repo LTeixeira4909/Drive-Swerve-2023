@@ -4,6 +4,7 @@ import javax.sound.sampled.SourceDataLine;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
@@ -28,9 +29,9 @@ public class Module {
 
         // this.tab = DrivetrainSubsystem.getInstance().getTab();
 
-        driveMotor = new TalonFX(driveMotorCanId);//, "CANivore1");
-        turnMotor = new TalonFX(turnMotorCanId);//, "CANivore1");
-        enc = new CANCoder(encoderCanId);//, "CANivore1");
+        driveMotor = new TalonFX(driveMotorCanId, "CANivore1");
+        turnMotor = new TalonFX(turnMotorCanId, "CANivore1");
+        enc = new CANCoder(encoderCanId, "CANivore1");
 
         enc.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
       
@@ -54,6 +55,8 @@ public class Module {
         turnMotor.setSelectedSensorPosition(DrivetrainSubsystem.convertDegreesToTicks(initialOffset));
         turnMotor.setInverted(true);
 
+        driveMotor.setNeutralMode(NeutralMode.Brake);
+
         double turnMotorKp = .2;
         double turnMotorKI = 0;
         double turnMotorKD = 0.1;
@@ -63,9 +66,6 @@ public class Module {
         turnMotor.config_kD(0, turnMotorKD);
 
         driveMotor.setInverted(false);
-
-        
-
     }
 
     public void setModuleState(SwerveModuleState desiredState) {
