@@ -28,9 +28,9 @@ public class Module {
 
         // this.tab = DrivetrainSubsystem.getInstance().getTab();
 
-        driveMotor = new TalonFX(driveMotorCanId, "CANivore1");
-        turnMotor = new TalonFX(turnMotorCanId, "CANivore1");
-        enc = new CANCoder(encoderCanId, "CANivore1");
+        driveMotor = new TalonFX(driveMotorCanId);//, "CANivore1");
+        turnMotor = new TalonFX(turnMotorCanId);//, "CANivore1");
+        enc = new CANCoder(encoderCanId);//, "CANivore1");
 
         enc.configSensorInitializationStrategy(SensorInitializationStrategy.BootToAbsolutePosition);
       

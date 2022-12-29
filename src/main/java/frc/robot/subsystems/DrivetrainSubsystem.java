@@ -19,7 +19,7 @@ import frc.robot.Module;
 public class DrivetrainSubsystem extends SubsystemBase {
     // private static DrivetrainSubsystem instance = null;
 
-    double wheelBase = 31.625 * 0.0254;
+    double wheelBase = (31.625 * 0.0254)/2.0;
     // Locations for the swerve drive modules relative to the robot center.
     Translation2d m_frontLeftLocation = new Translation2d(wheelBase, wheelBase);
     Translation2d m_frontRightLocation = new Translation2d(wheelBase, -wheelBase);
@@ -42,10 +42,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     Joystick js0 = new Joystick(0);
 
-    Module leftModule = new Module("FrontLeft", 7, 8, 14);
-    Module rightModule = new Module("FrontRight", 2, 1, 11);
-    Module backRightModule = new Module("BackRight", 4, 3, 12);
-    Module backLeftModule = new Module("BackLeft", 6, 5, 13);
+    Module leftModule = new Module("FrontLeft", 45, 40, 50);
+    Module rightModule = new Module("FrontRight", 43, 44, 51);
+    Module backRightModule = new Module("BackRight", 23, 41, 52);
+    Module backLeftModule = new Module("BackLeft", 20, 22, 53);
 
     ShuffleboardTab drivetrainTab;
 
@@ -53,7 +53,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SlewRateLimiter leftRightRateLimiter = new SlewRateLimiter(0.5);
     SlewRateLimiter turnRateLimiter = new SlewRateLimiter(0.5);
 
-    Pigeon2 pigeon = new Pigeon2(20, "CANivore1");
+    Pigeon2 pigeon = new Pigeon2(0);//, "CANivore1");
 
     public Rotation2d getGyroHeading() {
         // // Get my gyro angle. We are negating the value because gyros return positive
