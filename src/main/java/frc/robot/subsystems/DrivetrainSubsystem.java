@@ -55,6 +55,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     Pigeon2 pigeon = new Pigeon2(0, "CANivore1");
 
+    static final double FRONT_LEFT_STEER_OFFSET = -Math.toRadians(0); 
+    static final double FRONT_RIGHT_STEER_OFFSET = -Math.toRadians(0);
+    static final double BACK_LEFT_STEER_OFFSET = -Math.toRadians(0);
+    static final double BACK_RIGHT_STEER_OFFSET = -Math.toRadians(0);
+
     public Rotation2d getGyroHeading() {
         // // Get my gyro angle. We are negating the value because gyros return positive
         // // values as the robot turns clockwise. This is not standard convention that
@@ -72,22 +77,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 getGyroHeading(),
                 new Pose2d(0, 0, new Rotation2d()));
     }
-
-    // private DrivetrainSubsystem() {
-    // drivetrainTab = Shuffleboard.getTab("drivetrain");
-
-    // }
-
-    // public static DrivetrainSubsystem getInstance() {
-    // if (instance == null) {
-    // instance = new DrivetrainSubsystem();
-    // }
-    // return instance;
-    // }
-
-    // public ShuffleboardTab getTab() {
-    // return drivetrainTab;
-    // }
 
     // this is alled every loop of the scheduler (~20ms)
     @Override
