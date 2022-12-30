@@ -6,11 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.DrivetrainSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
-  private final XboxController m_controller = new XboxController(0);
+  // private final XboxController m_controller = new XboxController(0);
   
   private final DrivetrainSubsystem m_drivetrainSubsystem = new DrivetrainSubsystem();
   
