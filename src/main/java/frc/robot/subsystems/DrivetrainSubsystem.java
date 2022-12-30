@@ -19,7 +19,7 @@ import frc.robot.Module;
 public class DrivetrainSubsystem extends SubsystemBase {
     // private static DrivetrainSubsystem instance = null;
 
-    double wheelBase = (31.625 * 0.0254)/2.0;
+    double wheelBase = (31.625 * 0.0254) / 2.0;
     // Locations for the swerve drive modules relative to the robot center.
     Translation2d m_frontLeftLocation = new Translation2d(wheelBase, wheelBase);
     Translation2d m_frontRightLocation = new Translation2d(wheelBase, -wheelBase);
@@ -42,10 +42,30 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     Joystick js0 = new Joystick(0);
 
-    Module leftModule = new Module("FrontLeft", 45, 40, 50);
-    Module rightModule = new Module("FrontRight", 43, 44, 51);
-    Module backRightModule = new Module("BackRight", 23, 41, 52);
-    Module backLeftModule = new Module("BackLeft", 20, 22, 53);
+    final double HEAD_LT_STEER_OFFSET = -Math.toRadians(0);
+    final double HEAD_RT_STEER_OFFSET = -Math.toRadians(0);
+    final double BACK_LT_STEER_OFFSET = -Math.toRadians(0);
+    final double BACK_RT_STEER_OFFSET = -Math.toRadians(0);
+
+    final int HEAD_LT_DRIVE_CAN_ID = 45;
+    final int HEAD_RT_DRIVE_CAN_ID = 43;
+    final int BACK_LT_DRIVE_CAN_ID = 23;
+    final int BACK_RT_DRIVE_CAN_ID = 20;
+
+    final int HEAD_LT_TURN_CAN_ID = 40;
+    final int HEAD_RT_TURN_CAN_ID = 44;
+    final int BACK_LT_TURN_CAN_ID = 41;
+    final int BACK_RT_TURN_CAN_ID = 22;
+
+    final int HEAD_LT_ENC_CAN_ID = 50;
+    final int HEAD_RT_ENC_CAN_ID = 51;
+    final int BACK_LT_ENC_CAN_ID = 52;
+    final int BACK_RT_ENC_CAN_ID = 53;
+
+    Module headLtModule = new Module("HeadLt", HEAD_LT_DRIVE_CAN_ID, HEAD_LT_TURN_CAN_ID, HEAD_LT_ENC_CAN_ID, HEAD_LT_STEER_OFFSET);
+    Module headRtModule = new Module("HeadRt", HEAD_RT_DRIVE_CAN_ID, HEAD_RT_TURN_CAN_ID, HEAD_RT_ENC_CAN_ID, HEAD_RT_STEER_OFFSET);
+    Module backRtModule = new Module("BackRt", BACK_LT_DRIVE_CAN_ID, BACK_LT_TURN_CAN_ID, BACK_LT_ENC_CAN_ID, BACK_LT_STEER_OFFSET);
+    Module backLtModule = new Module("BackLt", BACK_RT_DRIVE_CAN_ID, BACK_RT_TURN_CAN_ID, BACK_RT_ENC_CAN_ID, BACK_RT_STEER_OFFSET);
 
     ShuffleboardTab drivetrainTab;
 
@@ -55,17 +75,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     Pigeon2 pigeon = new Pigeon2(0, "CANivore1");
 
-    static final double FRONT_LEFT_STEER_OFFSET = -Math.toRadians(0); 
-    static final double FRONT_RIGHT_STEER_OFFSET = -Math.toRadians(0);
-    static final double BACK_LEFT_STEER_OFFSET = -Math.toRadians(0);
-    static final double BACK_RIGHT_STEER_OFFSET = -Math.toRadians(0);
-
     public Rotation2d getGyroHeading() {
-        // // Get my gyro angle. We are negating the value because gyros return positive
-        // // values as the robot turns clockwise. This is not standard convention that
-        // is
-        // // used by the WPILib classes.
-        // var gyroAngle = Rotation2d.fromDegrees(-m_gyro.getAngle());
         return Rotation2d.fromDegrees(pigeon.getYaw());
     }
 
@@ -78,13 +88,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 new Pose2d(0, 0, new Rotation2d()));
     }
 
-    // this is alled every loop of the scheduler (~20ms)
+    // This is called every loop of the scheduler (~20ms)
     @Override
     public void periodic() {
 
         // Update the pose
-        m_pose = m_odometry.update(getGyroHeading(), leftModule.getState(), rightModule.getState(),
-                backLeftModule.getState(), backRightModule.getState());
+        m_pose = m_odometry.update(getGyroHeading(), headLtModule.getState(), headRtModule.getState(),
+                backLtModule.getState(), backRtModule.getState());
 
         SmartDashboard.putNumber("Pose roation", m_pose.getRotation().getDegrees());
         SmartDashboard.putNumber("Pose X", m_pose.getX());
@@ -115,10 +125,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         fwdBackDir *= .6;
         leftRightDir *= .6;
 
-
         // fwdBackDir = fwdBakRateLimiter.calculate(fwdBackDir);
         // leftRightDir = leftRightRateLimiter.calculate(leftRightDir);
-
         // turn = turnRateLimiter.calculate(turn);
 
         double deadband = .05;
@@ -137,10 +145,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         // button 8 on xbox is three lines button
         if (js.getRawButton(8)) {
-            leftModule.resetTurnEncoders();
-            rightModule.resetTurnEncoders();
-            backRightModule.resetTurnEncoders();
-            backLeftModule.resetTurnEncoders();
+            headLtModule.resetTurnEncoders();
+            headRtModule.resetTurnEncoders();
+            backRtModule.resetTurnEncoders();
+            backLtModule.resetTurnEncoders();
         }
         // button 7 on xbox it two squares
         if (js.getRawButton(7)) {
@@ -166,10 +174,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         SwerveModuleState backRight = moduleStates[3];
         SwerveModuleState backLeft = moduleStates[2];
 
-        leftModule.setModuleState(frontLeft);
-        rightModule.setModuleState(frontRight);
-        backRightModule.setModuleState(backRight);
-        backLeftModule.setModuleState(backLeft);
+        headLtModule.setModuleState(frontLeft);
+        headRtModule.setModuleState(frontRight);
+        backRtModule.setModuleState(backRight);
+        backLtModule.setModuleState(backLeft);
 
     }
 
