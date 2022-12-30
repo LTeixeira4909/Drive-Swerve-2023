@@ -121,10 +121,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
         double fwdBackDir = -1 * js.getRawAxis(1); // positive number means fwd
         double turn = -1 * js.getRawAxis(4); // positive number means clockwise
 
-        fwdBackDir = fwdBakRateLimiter.calculate(fwdBackDir);
-        leftRightDir = leftRightRateLimiter.calculate(leftRightDir);
+        // set max speed
+        turn *= .4;
+        fwdBackDir *= .6;
+        leftRightDir *= .6;
 
-        turn = turnRateLimiter.calculate(turn);
+
+        // fwdBackDir = fwdBakRateLimiter.calculate(fwdBackDir);
+        // leftRightDir = leftRightRateLimiter.calculate(leftRightDir);
+
+        // turn = turnRateLimiter.calculate(turn);
 
         double deadband = .05;
 
