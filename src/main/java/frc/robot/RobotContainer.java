@@ -4,6 +4,9 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.commands.DefaultDriveCommand;
@@ -56,7 +59,7 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-   return null;
+   return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Our Path", new PathConstraints(4, 3)), true);
    
     // An ExampleCommand will run in autonomous
     //return m_autoCommand;
