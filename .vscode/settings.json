@@ -27,5 +27,5 @@
   ],
   "java.test.defaultConfig": "WPIlibUnitTests",
   "C_Cpp.intelliSenseEngineFallback": "Enabled",
-  "wpilib.autoStartRioLog": true
+  "wpilib.autoStartRioLog": false
 }

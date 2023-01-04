@@ -4,6 +4,7 @@ import javax.sound.sampled.SourceDataLine;
 
 import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.CANCoder;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
@@ -63,8 +64,12 @@ public class Module {
         turnMotor.config_kD(0, turnMotorKD);
 
         driveMotor.setInverted(false);
+        driveMotor.setNeutralMode(NeutralMode.Brake);
 
     }
+
+    public final double MAX_VOLTAGE = 8;
+    public final double NOMINAL_VOLTAGE = 12;
 
     public void setModuleState(SwerveModuleState desiredState) {
 
@@ -78,7 +83,10 @@ public class Module {
 
         SmartDashboard.putNumber(name + " Heading", desiredState.angle.getDegrees());
 
-        driveMotor.set(ControlMode.PercentOutput, desiredState.speedMetersPerSecond);
+        double desiredVoltage = (desiredState.speedMetersPerSecond / DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE ) / NOMINAL_VOLTAGE;
+        SmartDashboard.putNumber(name + " desiredVoltage", desiredVoltage);
+
+        driveMotor.set(ControlMode.PercentOutput, desiredVoltage);
         turnMotor.set(ControlMode.Position, DrivetrainSubsystem.convertDegreesToTicks(desiredState.angle.getDegrees()));
 
     }

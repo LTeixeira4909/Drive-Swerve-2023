@@ -102,7 +102,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public void periodic() {
 
         // Update the pose
-
+        // button 8 on xbox is three lines button
+        if (js0.getRawButton(8)) {
+            leftModule.resetTurnEncoders();
+            rightModule.resetTurnEncoders();
+            backRightModule.resetTurnEncoders();
+            backLeftModule.resetTurnEncoders();
+        }
+        // button 7 on xbox it two squares
+        if (js0.getRawButton(7)) {
+            pigeon.setYaw(0);
+        }
 
         SmartDashboard.putString("odo", m_odometry.getPoseMeters().toString());
         SmartDashboard.putString("odo", m_odometry.getPoseMeters().toString());
@@ -110,7 +120,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("Pose X", m_pose.getX());
         // SmartDashboard.putNumber("Pose Y", m_pose.getY());
 
-        DriveWithJoystick(js0);
+        // DriveWithJoystick(js0);
         m_odometry.update(getGyroHeading(), leftModule.getState(), rightModule.getState(),
             backLeftModule.getState(), backRightModule.getState());
     }
@@ -180,7 +190,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     }
 
+    public static final double MAX_VELOCITY_METERS_PER_SECOND = 4;
+
     public void setModuleStates(SwerveModuleState[] moduleStates) {
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(moduleStates, MAX_VELOCITY_METERS_PER_SECOND);
+
         SwerveModuleState frontLeft = moduleStates[0];
         SwerveModuleState frontRight = moduleStates[1];
         SwerveModuleState backRight = moduleStates[3];
