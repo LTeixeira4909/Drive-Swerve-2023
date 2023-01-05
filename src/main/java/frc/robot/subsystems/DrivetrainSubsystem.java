@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Module;
+import frc.robot.commands.DefaultDriveCommand;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     // private static DrivetrainSubsystem instance = null;
@@ -71,8 +72,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
     private Pose2d getPose(){
         return m_odometry.getPoseMeters();
-    } 
-    public DrivetrainSubsystem() {
+    }
+
+    private static DrivetrainSubsystem m_inst = null;
+    
+    public static DrivetrainSubsystem getInstance() {
+        if (m_inst == null) {
+            m_inst = new DrivetrainSubsystem();
+        }
+        return m_inst;
+    }
+    private DrivetrainSubsystem() {
         pigeon.setYaw(0);
 
         m_odometry = new SwerveDriveOdometry(
@@ -142,10 +152,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
         double fwdBackDir = -1 * js.getRawAxis(1); // positive number means fwd
         double turn = -1 * js.getRawAxis(4); // positive number means clockwise
 
-        fwdBackDir = fwdBakRateLimiter.calculate(fwdBackDir);
-        leftRightDir = leftRightRateLimiter.calculate(leftRightDir);
-
-        turn = turnRateLimiter.calculate(turn);
+        // fwdBackDir = fwdBakRateLimiter.calculate(fwdBackDir);
+        // leftRightDir = leftRightRateLimiter.calculate(leftRightDir);
+        // turn = turnRateLimiter.calculate(turn);
 
         double deadband = .05;
 
