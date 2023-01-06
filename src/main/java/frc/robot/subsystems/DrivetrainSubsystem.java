@@ -48,10 +48,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     Joystick js0 = new Joystick(0);
 
-    Module leftModule = new Module("FrontLeft", 7, 8, 14);
-    Module rightModule = new Module("FrontRight", 2, 1, 11);
-    Module backRightModule = new Module("BackRight", 4, 3, 12);
-    Module backLeftModule = new Module("BackLeft", 6, 5, 13);
+
+    private final double FRONT_LEFT_ENC_OFFSET = 298.8;
+    private final double FRONT_RIGHT_ENC_OFFSET = 243.5;
+    private final double BACK_RIGHT_ENC_OFFSET = 305.7;
+    private final double BACK_LEFT_ENC_OFFSET = 306.8;   
+
+    Module leftModule = new Module("FrontLeft", 7, 8, 14, FRONT_LEFT_ENC_OFFSET);
+    Module rightModule = new Module("FrontRight", 2, 1, 11, FRONT_RIGHT_ENC_OFFSET);
+    Module backRightModule = new Module("BackRight", 4, 3, 12, BACK_RIGHT_ENC_OFFSET);
+    Module backLeftModule = new Module("BackLeft", 6, 5, 13, BACK_LEFT_ENC_OFFSET);
 
     ShuffleboardTab drivetrainTab;
 
@@ -113,7 +119,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // this is alled every loop of the scheduler (~20ms)
     @Override
     public void periodic() {
-
+        leftModule.periodic();
+        rightModule.periodic();
+        backLeftModule.periodic();
+        backRightModule.periodic();
+       
         SmartDashboard.putNumber("Pidgeon yaw", pigeon.getYaw());
 
         // Update the pose
