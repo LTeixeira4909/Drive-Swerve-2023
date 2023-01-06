@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Module;
-import frc.robot.commands.DefaultDriveCommand;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     // private static DrivetrainSubsystem instance = null;
@@ -70,18 +69,20 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // var gyroAngle = Rotation2d.fromDegrees(-m_gyro.getAngle());
         return Rotation2d.fromDegrees(pigeon.getYaw());
     }
-    private Pose2d getPose(){
+
+    private Pose2d getPose() {
         return m_odometry.getPoseMeters();
     }
 
     private static DrivetrainSubsystem m_inst = null;
-    
+
     public static DrivetrainSubsystem getInstance() {
         if (m_inst == null) {
             m_inst = new DrivetrainSubsystem();
         }
         return m_inst;
     }
+
     private DrivetrainSubsystem() {
         pigeon.setYaw(0);
 
@@ -89,6 +90,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 m_kinematics,
                 getGyroHeading(),
                 new Pose2d(0, 0, new Rotation2d()));
+        
+        SmartDashboard.putBoolean("Done", false);
     }
 
     // private DrivetrainSubsystem() {
@@ -111,6 +114,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     @Override
     public void periodic() {
 
+        SmartDashboard.putNumber("Pidgeon yaw", pigeon.getYaw());
+
         // Update the pose
         // button 8 on xbox is three lines button
         if (js0.getRawButton(8)) {
@@ -132,7 +137,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         // DriveWithJoystick(js0);
         m_odometry.update(getGyroHeading(), leftModule.getState(), rightModule.getState(),
-            backLeftModule.getState(), backRightModule.getState());
+                backLeftModule.getState(), backRightModule.getState());
     }
 
     public static double convertTicksToDegrees(double ticks) {
@@ -170,26 +175,17 @@ public class DrivetrainSubsystem extends SubsystemBase {
             turn = 0;
         }
 
-        // button 8 on xbox is three lines button
-        if (js.getRawButton(8)) {
-            leftModule.resetTurnEncoders();
-            rightModule.resetTurnEncoders();
-            backRightModule.resetTurnEncoders();
-            backLeftModule.resetTurnEncoders();
-        }
-        // button 7 on xbox it two squares
-        if (js.getRawButton(7)) {
-            pigeon.setYaw(0);
-        }
-
         // Example chassis speeds: 1 meter per second forward, 3 meters
         // per second to the left, and rotation at 1.5 radians per second
         // counteclockwise.
         // ChassisSpeeds speeds = new ChassisSpeeds(fwdBackDir, leftRightDir, turn);
 
-        SmartDashboard.putNumber("Pidgeon yaw", pigeon.getYaw());
+        
 
-        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(fwdBackDir, leftRightDir, turn,
+        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                fwdBackDir * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+                leftRightDir * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+                turn * DrivetrainSubsystem.MAX_OMEGA_RADIANS_PER_SECOND,
                 Rotation2d.fromDegrees(pigeon.getYaw()));
 
         // Convert to module states
@@ -200,6 +196,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public static final double MAX_VELOCITY_METERS_PER_SECOND = 4;
+    public static final double MAX_OMEGA_RADIANS_PER_SECOND = 1;
 
     public void setModuleStates(SwerveModuleState[] moduleStates) {
 
@@ -215,24 +212,28 @@ public class DrivetrainSubsystem extends SubsystemBase {
         backRightModule.setModuleState(backRight);
         backLeftModule.setModuleState(backLeft);
     }
-    public Command traj(PathPlannerTrajectory traj, boolean isFirstPath){
-      return new SequentialCommandGroup(
-          new InstantCommand(() -> {
-            if(isFirstPath)
-                this.m_odometry.resetPosition(traj.getInitialHolonomicPose(), getGyroHeading()); 
-          }),
-          new PPSwerveControllerCommand(
-                traj,
-                this::getPose,
-                this.m_kinematics,
-                new PIDController(0, 0, 0), 
-                new PIDController(0, 0, 0),
-                new PIDController(0, 0, 0),
-                this::setModuleStates,
-                this
-          )
-      );     
-    }
 
+    public Command traj(PathPlannerTrajectory traj, boolean isFirstPath) {
+
+        PIDController xyController = new PIDController(5, 0, 0);
+
+        return new SequentialCommandGroup(
+                new InstantCommand(() -> {
+                    if (isFirstPath)
+                        this.m_odometry.resetPosition(traj.getInitialHolonomicPose(), getGyroHeading());
+                }),
+                new PPSwerveControllerCommand(
+                        traj,
+                        this::getPose,
+                        this.m_kinematics,
+                        xyController,
+                        xyController,
+                        new PIDController(5, 0, 0),
+                        this::setModuleStates,
+                        this),
+                new InstantCommand(() -> {
+                    SmartDashboard.putBoolean("Done", true);
+                }));
+    }
 
 }

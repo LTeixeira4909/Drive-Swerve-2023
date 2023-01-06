@@ -1,8 +1,5 @@
 package frc.robot;
 
-import javax.sound.sampled.SourceDataLine;
-
-import com.ctre.phoenix.ErrorCode;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
@@ -11,7 +8,6 @@ import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
@@ -37,22 +33,10 @@ public class Module {
 
         // enc.setStatusFramePeriod(statusFrame, periodMs)
 
-        double initialOffset = 0;
-        int maxRetryCount = 500;
-        ErrorCode ec;
-        do {
-            initialOffset = enc.getPosition();
-            ec = enc.getLastError();
-            if (ec != ErrorCode.OK) {
-                System.out.println(name + " -" + enc.getLastError());
-            }
-        } while (ec != ErrorCode.OK && maxRetryCount-- > 0);
-        SmartDashboard.putNumber(name + "retrycount", maxRetryCount);
-
         turnMotor.configFactoryDefault();
         driveMotor.configFactoryDefault();
         // set motor encoder to 0 when robot code starts
-        turnMotor.setSelectedSensorPosition(DrivetrainSubsystem.convertDegreesToTicks(initialOffset));
+        turnMotor.setSelectedSensorPosition(DrivetrainSubsystem.convertDegreesToTicks(enc.getPosition()));
         turnMotor.setInverted(true);
 
         double turnMotorKp = .2;
@@ -83,17 +67,14 @@ public class Module {
 
         SmartDashboard.putNumber(name + " Heading", desiredState.angle.getDegrees());
 
-        double desiredVoltage = (desiredState.speedMetersPerSecond / DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND * MAX_VOLTAGE ) / NOMINAL_VOLTAGE;
-        SmartDashboard.putNumber(name + " desiredVoltage", desiredVoltage);
+        double desiredPercentOutput = (desiredState.speedMetersPerSecond / DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND) * (MAX_VOLTAGE / NOMINAL_VOLTAGE);
+        SmartDashboard.putNumber(name + " desiredVoltage", desiredPercentOutput);
 
-        driveMotor.set(ControlMode.PercentOutput, desiredVoltage);
+        driveMotor.set(ControlMode.PercentOutput, desiredPercentOutput);
         turnMotor.set(ControlMode.Position, DrivetrainSubsystem.convertDegreesToTicks(desiredState.angle.getDegrees()));
-
     }
 
     public SwerveModuleState getState() {
-
-        // System.out.println("got here!");
 
         double speedTicksPer100miliSeconds = driveMotor.getSelectedSensorVelocity();
 
