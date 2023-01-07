@@ -37,9 +37,10 @@ public class Module {
         driveMotor.configFactoryDefault();
         // set motor encoder to 0 when robot code starts
 
-        var currentHeadingTicks = DrivetrainSubsystem.convertDegreesToTicks(getHeading());
+        var currentHeadingTicks = -1 * DrivetrainSubsystem.convertDegreesToTicks(getHeading());
         turnMotor.setSelectedSensorPosition(currentHeadingTicks);
         turnMotor.set(ControlMode.Position, currentHeadingTicks);
+        SmartDashboard.putNumber(m_name + " initial heading", getHeading());
 
         turnMotor.setInverted(true);
 
@@ -70,6 +71,7 @@ public class Module {
         SmartDashboard.putNumber(m_name + " Cancoder",  enc.getPosition());
         SmartDashboard.putNumber(m_name + " Cancoder with offset",  getHeading());
         SmartDashboard.putNumber(m_name + " error", turnMotor.getClosedLoopError());
+        SmartDashboard.putNumber(m_name + " error deg", DrivetrainSubsystem.convertTicksToDegrees(turnMotor.getClosedLoopError()));
         SmartDashboard.putNumber(m_name + " turnMotor", DrivetrainSubsystem.convertTicksToDegrees(turnMotor.getSelectedSensorPosition()));
     }
 
@@ -83,7 +85,7 @@ public class Module {
         
         
 
-        // desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(getHeading()));
+        desiredState = SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(getHeading()));
 
         SmartDashboard.putNumber(m_name + " Heading", desiredState.angle.getDegrees());
 
