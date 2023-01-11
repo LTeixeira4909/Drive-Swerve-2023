@@ -5,13 +5,14 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.filter.SlewRateLimiter; 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -88,13 +89,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
         }
         return m_inst;
     }
-
+    private SwerveModulePosition[] getModulePositions () {
+        SwerveModulePosition[] positions = new SwerveModulePosition[4];
+        positions[0] = leftModule.getPosition();  
+        positions[1] = rightModule.getPosition();  
+        positions[2] = backRightModule.getPosition();
+        positions[3] = backLeftModule.getPosition();  
+       return positions;
+        
+    }
     private DrivetrainSubsystem() {
         pigeon.setYaw(0);
 
         m_odometry = new SwerveDriveOdometry(
                 m_kinematics,
                 getGyroHeading(),
+             getModulePositions(),
+                
                 new Pose2d(0, 0, new Rotation2d()));
         
         SmartDashboard.putBoolean("Done", false);
@@ -146,8 +157,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // SmartDashboard.putNumber("Pose Y", m_pose.getY());
 
         // DriveWithJoystick(js0);
-        m_odometry.update(getGyroHeading(), leftModule.getState(), rightModule.getState(),
-                backLeftModule.getState(), backRightModule.getState());
+        m_odometry.update(getGyroHeading(), getModulePositions());
     }
 
     public static double convertTicksToDegrees(double ticks) {
@@ -230,7 +240,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return new SequentialCommandGroup(
                 new InstantCommand(() -> {
                     if (isFirstPath)
-                        this.m_odometry.resetPosition(traj.getInitialHolonomicPose(), getGyroHeading());
+                        this.m_odometry.resetPosition(getGyroHeading(),getModulePositions(),traj.getInitialHolonomicPose());
+            
                 }),
                 new PPSwerveControllerCommand(
                         traj,

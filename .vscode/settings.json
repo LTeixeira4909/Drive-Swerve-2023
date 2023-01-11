@@ -25,7 +25,5 @@
       }
     },
   ],
-  "java.test.defaultConfig": "WPIlibUnitTests",
-  "C_Cpp.intelliSenseEngineFallback": "Enabled",
-  "wpilib.autoStartRioLog": false
+  "java.test.defaultConfig": "WPIlibUnitTests"
 }

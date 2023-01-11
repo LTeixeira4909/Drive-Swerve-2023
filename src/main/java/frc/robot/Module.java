@@ -4,10 +4,11 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
-import com.ctre.phoenix.sensors.CANCoder;
-import com.ctre.phoenix.sensors.SensorInitializationStrategy;
+import com.ctre.phoenix.sensors.CANCoder; 
+import com.ctre.phoenix.sensors.SensorInitializationStrategy; 
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -25,7 +26,7 @@ public class Module {
         m_offset = encOffset;
         // this.tab = DrivetrainSubsystem.getInstance().getTab();
 
-        driveMotor = new TalonFX(driveMotorCanId, "CANivore1");
+        driveMotor = new TalonFX(driveMotorCanId, "CANivore1"); 
         turnMotor = new TalonFX(turnMotorCanId, "CANivore1");
         enc = new CANCoder(encoderCanId, "CANivore1");
 
@@ -109,7 +110,12 @@ public class Module {
         return new SwerveModuleState(speedMetersPerSecond, Rotation2d.fromDegrees( getHeading()));
 
     }
-
+    public SwerveModulePosition getPosition () {
+        double distanceMeters = (1 / 2048d) * (1 / 6.75) * ((4.0 * Math.PI) / 1d) * (.0254 / 1) * driveMotor.getSelectedSensorPosition();
+        Rotation2d angle = Rotation2d.fromDegrees( getHeading());
+        ;
+        return new SwerveModulePosition(distanceMeters, angle);
+    }
     public void resetTurnEncoders() {
         // enc.setPosition(0);
         // turnMotor.setSelectedSensorPosition(DrivetrainSubsystem.convertDegreesToTicks(0));
