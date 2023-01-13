@@ -161,6 +161,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public static double convertTicksToDegrees(double ticks) {
+        // Cancoder: 2048 ticks per rotation
+        // Steering gear ratio: 150/7:1
         double degrees = ticks * (1.0 / 2048.0) * (1.0 / (150 / 7)) * (360.0 / 1.0);
         return degrees;
     }
@@ -216,7 +218,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public static final double MAX_VELOCITY_METERS_PER_SECOND = 4;
-    public static final double MAX_OMEGA_RADIANS_PER_SECOND = 1;
+    public static final double MAX_OMEGA_RADIANS_PER_SECOND = 2.5;
 
     public void setModuleStates(SwerveModuleState[] moduleStates) {
 
