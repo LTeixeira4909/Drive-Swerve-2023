@@ -4,8 +4,11 @@
 
 package frc.robot;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
@@ -15,6 +18,8 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -29,9 +34,11 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
 
   // private final XboxController m_controller = new XboxController(0);
-  private final Joystick m_driver = new Joystick(0);
+  private final CommandXboxController m_driver = new CommandXboxController(0);
 
   private final DrivetrainSubsystem m_drivetrainSubsystem = DrivetrainSubsystem.getInstance();
+
+  CANSparkMax spark = new CANSparkMax(0, MotorType.kBrushless);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -66,6 +73,7 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    m_driver.a().onTrue(new InstantCommand(() -> spark.set(0.5)));
   }
 
   /**

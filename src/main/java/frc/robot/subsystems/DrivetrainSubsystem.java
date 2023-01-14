@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Module;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -171,7 +172,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return ticks;
     }
 
-    public void DriveWithJoystick(Joystick js) {
+    public void DriveWithJoystick(CommandXboxController js) {
 
         double leftRightDir = -1 * js.getRawAxis(0); // positive number means left
         double fwdBackDir = -1 * js.getRawAxis(1); // positive number means fwd
