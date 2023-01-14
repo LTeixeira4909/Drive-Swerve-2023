@@ -111,6 +111,9 @@ public class Module {
 
     }
     public SwerveModulePosition getPosition () {
+        // 2048 ticks per rotation
+        // 6.75:1 gear ratio
+        // 4" wheels
         double distanceMeters = (1 / 2048d) * (1 / 6.75) * ((4.0 * Math.PI) / 1d) * (.0254 / 1) * driveMotor.getSelectedSensorPosition();
         Rotation2d angle = Rotation2d.fromDegrees( getHeading());
         ;

@@ -68,6 +68,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SlewRateLimiter turnRateLimiter = new SlewRateLimiter(0.5);
 
     Pigeon2 pigeon = new Pigeon2(20, "CANivore1");
+    //Global variable for drive rate speed
+    double g_driveRate;
 
     public Rotation2d getGyroHeading() {
         // // Get my gyro angle. We are negating the value because gyros return positive
@@ -150,6 +152,14 @@ public class DrivetrainSubsystem extends SubsystemBase {
         if (js0.getRawButton(7)) {
             pigeon.setYaw(0);
         }
+        //Button 6 is right bumper/slow button
+        //Speed is multiplied by 0.3 when held down
+        if (js0.getRawButton(6)) {
+            setDriveRate(0.3);
+        }
+        else {
+            setDriveRate(1);
+        }
 
         SmartDashboard.putString("odo", m_odometry.getPoseMeters().toString());
         SmartDashboard.putString("odo", m_odometry.getPoseMeters().toString());
@@ -162,6 +172,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public static double convertTicksToDegrees(double ticks) {
+        // Cancoder: 2048 ticks per rotation
+        // Steering gear ratio: 150/7:1
         double degrees = ticks * (1.0 / 2048.0) * (1.0 / (150 / 7)) * (360.0 / 1.0);
         return degrees;
     }
@@ -174,9 +186,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public void DriveWithJoystick(CommandXboxController js) {
 
-        double leftRightDir = -1 * js.getRawAxis(0); // positive number means left
-        double fwdBackDir = -1 * js.getRawAxis(1); // positive number means fwd
-        double turn = -1 * js.getRawAxis(4); // positive number means clockwise
+        double leftRightDir = -1 * getDriveRate() * js.getRawAxis(0); // positive number means left
+        double fwdBackDir = -1 * getDriveRate() * js.getRawAxis(1); // positive number means fwd
+        double turn = -1 * getDriveRate() * js.getRawAxis(4); // positive number means clockwise
 
         // fwdBackDir = fwdBakRateLimiter.calculate(fwdBackDir);
         // leftRightDir = leftRightRateLimiter.calculate(leftRightDir);
@@ -217,7 +229,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public static final double MAX_VELOCITY_METERS_PER_SECOND = 4;
-    public static final double MAX_OMEGA_RADIANS_PER_SECOND = 1;
+    public static final double MAX_OMEGA_RADIANS_PER_SECOND = 2.5;
 
     public void setModuleStates(SwerveModuleState[] moduleStates) {
 
@@ -256,6 +268,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
                 new InstantCommand(() -> {
                     SmartDashboard.putBoolean("Done", true);
                 }));
+    }
+
+    public void setDriveRate(double driveRate) {
+        g_driveRate = driveRate;
+    }
+    public double getDriveRate() {
+        return g_driveRate;
     }
 
 }
