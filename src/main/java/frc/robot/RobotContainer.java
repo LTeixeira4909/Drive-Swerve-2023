@@ -13,6 +13,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
@@ -40,6 +42,8 @@ public class RobotContainer {
 
   CANSparkMax spark = new CANSparkMax(0, MotorType.kBrushless);
 
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -62,6 +66,13 @@ public class RobotContainer {
     // ));
     // Configure the button bindings
     configureButtonBindings();
+
+    m_chooser.setDefaultOption("Default Auto", m_drivetrainSubsystem.traj(PathPlanner.loadPath("Rotate 90 Path", new PathConstraints(4, 3)), true));
+    m_chooser.addOption("Complex Auto", m_drivetrainSubsystem.traj(PathPlanner.loadPath("Angle Path", new PathConstraints(4, 3)), true));
+
+    SmartDashboard.putData(m_chooser);
+
+
   }
 
   /**
@@ -85,9 +96,13 @@ public class RobotContainer {
     // return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Our Path", new PathConstraints(4, 3)), true);
     //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Left 7 Path", new PathConstraints(4, 3)), true);
     //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Angle Path", new PathConstraints(4, 3)), true);
-    return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Rotate 90 Path", new PathConstraints(4, 3)), true);
+    //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Rotate 90 Path", new PathConstraints(4, 3)), true);
+ 
+    return m_chooser.getSelected();
+  }
+   
     
     // An ExampleCommand will run in autonomous
     // return m_autoCommand;
-  }
+  
 }

@@ -186,8 +186,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public void DriveWithJoystick(CommandXboxController js) {
 
-        double leftRightDir = -1 * getDriveRate() * js.getRawAxis(0); // positive number means left
-        double fwdBackDir = -1 * getDriveRate() * js.getRawAxis(1); // positive number means fwd
+        double leftRightDir = 1 * getDriveRate() * js.getRawAxis(1); // positive number means left
+        double fwdBackDir = -1 * getDriveRate() * js.getRawAxis(0); // positive number means fwd
         double turn = -1 * getDriveRate() * js.getRawAxis(4); // positive number means clockwise
 
         // fwdBackDir = fwdBakRateLimiter.calculate(fwdBackDir);
