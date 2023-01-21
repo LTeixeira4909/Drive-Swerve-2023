@@ -67,14 +67,36 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    m_chooser.setDefaultOption("Default Auto", m_drivetrainSubsystem.traj(PathPlanner.loadPath("Rotate 90 Path", new PathConstraints(4, 3)), true));
-    m_chooser.addOption("Complex Auto", m_drivetrainSubsystem.traj(PathPlanner.loadPath("Angle Path", new PathConstraints(4, 3)), true));
+     
+     
+   
+    //m_chooser.addOption("Complex Auto", m_drivetrainSubsystem.traj(PathPlanner.loadPath("Angle Path", new PathConstraints(4, 3)), true));
 
+    
+    addAutoPath("this path does not exist");
+    addAutoPath("Rotate 90 Path");
+    addAutoPath("1 Meter Path");
+    addAutoPath("Back 1 Meter Path");
+    addAutoPath("Back 180 Path");
+    addAutoPath("simple charge station");
+    addAutoPath("double score charge station");
+    addAutoPath("double score charge station HP");
+    m_chooser.setDefaultOption("Default Auto", m_drivetrainSubsystem.traj(PathPlanner.loadPath("1 Meter Path", new PathConstraints(4, 3)), true));
     SmartDashboard.putData(m_chooser);
 
-
+    
   }
-
+  public void addAutoPath(String pathName){
+    var fred = PathPlanner.loadPath(pathName, new PathConstraints(4, 3));
+    if ( fred == null){
+     System.out.println("unable to load path"+pathName);
+    }
+    else {
+      Command autoCmd = m_drivetrainSubsystem.traj(fred, true);
+      autoCmd.setName(pathName);
+      m_chooser.addOption(pathName, autoCmd);
+    }
+  }
   /**
    * Use this method to define your button->command mappings. Buttons can be
    * created by
@@ -100,9 +122,17 @@ public class RobotContainer {
  
     return m_chooser.getSelected();
   }
-   
-    
-    // An ExampleCommand will run in autonomous
-    // return m_autoCommand;
+
+    public String getSelectedAuto() {
+      // String autoName = m_chooser.getSelected().getName();
+      Command autoCmd = m_chooser.getSelected();
+      if (autoCmd == null) {
+        return "No Auto Selected";
+      }
+      else {
+        return autoCmd.getName();
+      }
+    }
+
   
 }

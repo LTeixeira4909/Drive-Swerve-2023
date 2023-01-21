@@ -267,7 +267,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
                         this),
                 new InstantCommand(() -> {
                     SmartDashboard.putBoolean("Done", true);
-                }));
+                })).andThen(new InstantCommand(() -> {setModuleStates(m_kinematics.toSwerveModuleStates(new ChassisSpeeds(0,0,0)));}));
     }
 
     public void setDriveRate(double driveRate) {
