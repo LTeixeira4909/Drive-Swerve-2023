@@ -18,7 +18,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.commands.BalanceCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -107,6 +107,7 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     m_driver.a().onTrue(new InstantCommand(() -> spark.set(0.5)));
+    m_driver.b().onTrue(new BalanceCommand());
   }
 
   /**

@@ -21,13 +21,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Module;
 
 public class DrivetrainSubsystem extends SubsystemBase {
     // private static DrivetrainSubsystem instance = null;
 
-    double wheelBase = 31.625 * 0.0254;
+    // double wheelBase = 31.625 * 0.0254;
+    double wheelBase = 26.0 * 0.0254;
     // Locations for the swerve drive modules relative to the robot center.
     Translation2d m_frontLeftLocation = new Translation2d(wheelBase, wheelBase);
     Translation2d m_frontRightLocation = new Translation2d(wheelBase, -wheelBase);
@@ -51,10 +53,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     Joystick js0 = new Joystick(0);
 
 
-    private final double FRONT_LEFT_ENC_OFFSET = 301;
-    private final double FRONT_RIGHT_ENC_OFFSET = 242.5;
-    private final double BACK_RIGHT_ENC_OFFSET = 306.7;
-    private final double BACK_LEFT_ENC_OFFSET = 307;   
+    private final double FRONT_LEFT_ENC_OFFSET = 301.8;
+    private final double FRONT_RIGHT_ENC_OFFSET = 243.7;
+    private final double BACK_RIGHT_ENC_OFFSET = 306.8;
+    private final double BACK_LEFT_ENC_OFFSET = 308;   
 
     Module leftModule = new Module("FrontLeft", 7, 8, 14, FRONT_LEFT_ENC_OFFSET);
     Module rightModule = new Module("FrontRight", 2, 1, 11, FRONT_RIGHT_ENC_OFFSET);
@@ -78,6 +80,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // // used by the WPILib classes.
         // var gyroAngle = Rotation2d.fromDegrees(-m_gyro.getAngle());
         return Rotation2d.fromDegrees(pigeon.getYaw());
+    }
+
+    public double getGyroPitch() {
+        return pigeon.getPitch();
     }
 
     private Pose2d getPose() {
@@ -148,7 +154,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
             backRightModule.resetTurnEncoders();
             backLeftModule.resetTurnEncoders();
         }
-        // button 7 on xbox it two squares
+        // button 7 on xbox is two squares
         if (js0.getRawButton(7)) {
             pigeon.setYaw(0);
         }
@@ -186,8 +192,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public void DriveWithJoystick(CommandXboxController js) {
 
-        double leftRightDir = 1 * getDriveRate() * js.getRawAxis(1); // positive number means left
-        double fwdBackDir = -1 * getDriveRate() * js.getRawAxis(0); // positive number means fwd
+        double leftRightDir = -1 * getDriveRate() * js.getRawAxis(0); // positive number means left
+        double fwdBackDir = -1 * getDriveRate() * js.getRawAxis(1); // positive number means fwd
         double turn = -1 * getDriveRate() * js.getRawAxis(4); // positive number means clockwise
 
         // fwdBackDir = fwdBakRateLimiter.calculate(fwdBackDir);
@@ -228,6 +234,19 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     }
 
+    public void DriveWithVelocity(double fwdBackDir, double leftRightDir, double turn) {
+        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+            fwdBackDir * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+            leftRightDir * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
+            turn * DrivetrainSubsystem.MAX_OMEGA_RADIANS_PER_SECOND,
+            Rotation2d.fromDegrees(pigeon.getYaw()));
+
+        // Convert to module states
+        SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
+
+        setModuleStates(moduleStates);
+    }
+
     public static final double MAX_VELOCITY_METERS_PER_SECOND = 4;
     public static final double MAX_OMEGA_RADIANS_PER_SECOND = 2.5;
 
@@ -256,6 +275,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
                         this.m_odometry.resetPosition(getGyroHeading(),getModulePositions(),traj.getInitialHolonomicPose());
             
                 }),
+                new WaitCommand(5),
                 new PPSwerveControllerCommand(
                         traj,
                         this::getPose,
