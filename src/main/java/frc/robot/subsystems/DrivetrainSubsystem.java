@@ -16,6 +16,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -35,6 +36,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     Translation2d m_frontRightLocation = new Translation2d(wheelBase, -wheelBase);
     Translation2d m_backLeftLocation = new Translation2d(-wheelBase, wheelBase);
     Translation2d m_backRightLocation = new Translation2d(-wheelBase, -wheelBase);
+    Field2d field = new Field2d();
 
     // Creating my kinematics object using the module locations
     SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
@@ -113,9 +115,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_odometry = new SwerveDriveOdometry(
                 m_kinematics,
                 getGyroHeading(),
-             getModulePositions(),
-                
-                new Pose2d(0, 0, new Rotation2d()));
+             getModulePositions());
         
         SmartDashboard.putBoolean("Done", false);
     }
@@ -145,7 +145,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         backRightModule.periodic();
        
         SmartDashboard.putNumber("Pidgeon yaw", pigeon.getYaw());
-
+        field.setRobotPose(m_odometry.getPoseMeters());
+        SmartDashboard.putData(field);
         // Update the pose
         // button 8 on xbox is three lines button
         if (js0.getRawButton(8)) {
@@ -275,7 +276,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
                         this.m_odometry.resetPosition(getGyroHeading(),getModulePositions(),traj.getInitialHolonomicPose());
             
                 }),
-                new WaitCommand(5),
                 new PPSwerveControllerCommand(
                         traj,
                         this::getPose,
