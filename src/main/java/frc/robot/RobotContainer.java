@@ -77,7 +77,8 @@ public class RobotContainer {
     // return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Our Path", new PathConstraints(4, 3)), true);
     //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Left 7 Path", new PathConstraints(4, 3)), true);
     //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Angle Path", new PathConstraints(4, 3)), true);
-    return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Rotate 90 Path", new PathConstraints(4, 3)), true);
+    //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Rotate 90 Path", new PathConstraints(4, 3)), true);
+    return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Charge Station Path", new PathConstraints(4, 3)), true);
     
     // An ExampleCommand will run in autonomous
     // return m_autoCommand;
