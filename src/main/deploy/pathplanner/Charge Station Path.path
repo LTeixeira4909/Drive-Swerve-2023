@@ -48,5 +48,12 @@
   "maxVelocity": 3.0,
   "maxAcceleration": null,
   "isReversed": null,
-  "markers": []
+  "markers": [
+    {
+      "position": 0.43636363636363645,
+      "names": [
+        "KingOfWorld"
+      ]
+    }
+  ]
 }
