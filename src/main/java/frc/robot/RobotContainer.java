@@ -10,11 +10,10 @@ import com.pathplanner.lib.PathPlanner;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import frc.robot.commands.DefaultDriveCommand;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.DrivetrainSubsystem;
-import frc.robot.subsystems.DrivetrainSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.subsystems.DrivetrainSubsystem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -26,6 +25,10 @@ import edu.wpi.first.wpilibj2.command.Command;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+
+  private final CommandXboxController m_driverController = new CommandXboxController(0);
+  private final CommandXboxController m_operatorController = new CommandXboxController(1);
+
   // The robot's subsystems and commands are defined here...
 
   // private final XboxController m_controller = new XboxController(0);
@@ -74,16 +77,54 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Our Path", new PathConstraints(4, 3)), true);
+    return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Our Path", new PathConstraints(4, 3)), true);
     //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Rotate 90 Path", new PathConstraints(4, 3)), true);
     //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Charge Station Path", new PathConstraints(4, 3)), true);
     //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("One piece charge Path", new PathConstraints(4, 3)), true);
     //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Two piece charge Path", new PathConstraints(2, 3)), true);
     //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("three piece charge Path", new PathConstraints(5, 4)), true);
-    return m_drivetrainSubsystem.traj(PathPlanner.loadPath("top three piece charge Path", new PathConstraints(5, 4)), true);
+    //var examplePath = PathPlanner.loadPath((PathPlanner.loadPath("Charge Station Path", new PathConstraints(5, 4)), true);
+    // var trajCmd = m_drivetrainSubsystem.traj(PathPlanner.loadPath("Charge Station Path", new PathConstraints(5, 4)), true);
+
+    // FollowPathWithEvents command = new FollowPathWithEvents(trajCmd, null, null);
     
-    // An ExampleCommand will run in autonomous
-    // return m_autoCommand;
+    // // An ExampleCommand will run in autonomous
+    // // return m_autoCommand;
+ 
+    // HashMap<String, Command> eventMap = new HashMap<>();
+    // eventMap.put("KingOfWorld", new PrintCommand("KingOfWorld"));
+    
+    // FollowPathWithEvents command2 = new FollowPathWithEvents(
+    //     command,
+    //     examplePath.getMarkers(),
+    //     eventMap
+    //   );
+ 
+ 
+ 
+ 
+  }
+  public void teleopPeriodic(){
+    // m_intake.setDR();
+
+  }
+
+  private double deadband(double value, double deadband) {
+    if (Math.abs(value) > deadband) {
+      if (value > 0d)
+        return (value - deadband) / (1d - deadband);
+      else
+        return (value + deadband) / (1d - deadband);
+    } else {
+      return 0d;
+    }
+  }
+
+  private double modifyAxis(double value) {
+    value = deadband(value, 0.05);
+    // Square the axis
+    value = Math.copySign(value * value, value);
+    return value;
  
     
  
@@ -96,6 +137,7 @@ public class RobotContainer {
  
  
   }
+
 
 
 

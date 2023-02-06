@@ -50,10 +50,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     Joystick js0 = new Joystick(0);
 
 
-    private final double FRONT_LEFT_ENC_OFFSET = 426.9;
-    private final double FRONT_RIGHT_ENC_OFFSET = 78.4;
-    private final double BACK_RIGHT_ENC_OFFSET = 317.7;
-    private final double BACK_LEFT_ENC_OFFSET = 250;   
+    private final double FRONT_LEFT_ENC_OFFSET = 288.0;
+    private final double FRONT_RIGHT_ENC_OFFSET = 186.4;
+    private final double BACK_RIGHT_ENC_OFFSET = 451.7;
+    private final double BACK_LEFT_ENC_OFFSET = 254.79;   
 
     Module leftModule = new Module("FrontLeft", 7, 8, 14, FRONT_LEFT_ENC_OFFSET);
     Module rightModule = new Module("FrontRight", 2, 1, 11, FRONT_RIGHT_ENC_OFFSET);
@@ -66,9 +66,13 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SlewRateLimiter leftRightRateLimiter = new SlewRateLimiter(0.5);
     SlewRateLimiter turnRateLimiter = new SlewRateLimiter(0.5);
 
-    Pigeon2 pigeon = new Pigeon2(20, "CANivore1");
+    Pigeon2 pigeon = new Pigeon2(20);
     //Global variable for drive rate speed
     double g_driveRate;
+
+    public double getPitch() {
+      return pigeon.getPitch();  
+    }
 
     public Rotation2d getGyroHeading() {
         // // Get my gyro angle. We are negating the value because gyros return positive
@@ -77,6 +81,11 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // // used by the WPILib classes.
         // var gyroAngle = Rotation2d.fromDegrees(-m_gyro.getAngle());
         return Rotation2d.fromDegrees(pigeon.getYaw());
+    }
+
+    public Rotation2d getGyroPitch() {
+    
+        return Rotation2d.fromDegrees(pigeon.getPitch());
     }
 
     private Pose2d getPose() {
@@ -177,6 +186,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
         return degrees;
     }
 
+
+
     public static double convertDegreesToTicks(double degrees) {
 
         double ticks = degrees * 1 / ((1.0 / 2048.0) * (1.0 / (150 / 7)) * (360.0 / 1.0));
@@ -213,7 +224,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // ChassisSpeeds speeds = new ChassisSpeeds(fwdBackDir, leftRightDir, turn);
 
         
+        go(fwdBackDir, leftRightDir, turn);
+        
 
+    }
+
+    public void go(double fwdBackDir, double leftRightDir, double turn) {
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
                 fwdBackDir * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
                 leftRightDir * DrivetrainSubsystem.MAX_VELOCITY_METERS_PER_SECOND,
@@ -224,7 +240,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
         SwerveModuleState[] moduleStates = m_kinematics.toSwerveModuleStates(speeds);
 
         setModuleStates(moduleStates);
-
     }
 
     public static final double MAX_VELOCITY_METERS_PER_SECOND = 4;
@@ -246,6 +261,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public Command traj(PathPlannerTrajectory traj, boolean isFirstPath) {
+
+        
 
         PIDController xyController = new PIDController(5, 0, 0);
 
@@ -275,5 +292,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public double getDriveRate() {
         return g_driveRate;
     }
+  
 
 }
+   

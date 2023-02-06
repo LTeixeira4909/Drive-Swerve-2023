@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -19,10 +20,11 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  * project.
  */
 public class Robot extends TimedRobot {
+  private final Intake m_intake = Intake.getInstance();
   private Command m_autonomousCommand;
   
     TalonSRX _talon0 = new TalonSRX(0); // Change '0' to match device ID in Tuner.  Use VictorSPX for Victor SPXs
-    Joystick _joystick = new Joystick(0);
+    CommandXboxController _joystick = new CommandXboxController(0);
   
   private RobotContainer m_robotContainer;
 
@@ -40,6 +42,24 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     double stick = _joystick.getRawAxis(1);
     _talon0.set(ControlMode.PercentOutput, stick);
+
+    if(_joystick.a().getAsBoolean()){
+      m_intake.setDR(Constants.DR_SPEED, true);
+      m_intake.setWW(Constants.WW_SPEED);
+    } else if(_joystick.b().getAsBoolean()){
+      m_intake.setDR(Constants.DR_SPEED, false);
+      m_intake.setWW(Constants.WW_SPEED);
+    } else if(_joystick.x().getAsBoolean()){
+      m_intake.setDR(-Constants.DR_SPEED, false);
+      m_intake.setWW(-Constants.WW_SPEED);
+    } else if(_joystick.y().getAsBoolean()){
+      m_intake.setDR(-Constants.DR_SPEED, true
+      );
+      m_intake.setWW(-Constants.WW_SPEED);
+    } else{
+      m_intake.setDR(0, true);
+      m_intake.setWW(0);
+    }
   }
 
   /**
