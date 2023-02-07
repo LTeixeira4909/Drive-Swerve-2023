@@ -22,7 +22,7 @@ public class Module {
     // ShuffleboardTab tab;
 
     public Module(String name, int driveMotorCanId, int turnMotorCanId, int encoderCanId, double encOffset) {
-        this.m_name = name;
+        m_name = name;
         m_offset = encOffset;
         // this.tab = DrivetrainSubsystem.getInstance().getTab();
 
