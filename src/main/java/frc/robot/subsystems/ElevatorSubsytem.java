@@ -10,6 +10,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.cscore.VideoEvent.Kind;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsytem extends SubsystemBase {
@@ -22,7 +23,16 @@ public class ElevatorSubsytem extends SubsystemBase {
   public SparkMaxPIDController m_pidController;
   public RelativeEncoder m_encoder;
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
-  
+
+  private static ElevatorSubsytem m_inst = null;
+
+  public static ElevatorSubsytem getInstance() {
+    if (m_inst == null) {
+      m_inst = new ElevatorSubsytem();
+    }
+    return m_inst;
+  }
+
   /** Creates a new ElevatorSubsytem. */
   public ElevatorSubsytem() {
     m_leadMotor = new CANSparkMax(leadDeviceID, MotorType.kBrushless);
@@ -33,12 +43,12 @@ public class ElevatorSubsytem extends SubsystemBase {
 
     m_followMotor.follow(m_leadMotor);
 
-    m_pidController = m_motor.getPIDController(); 
+    m_pidController = m_motor.getPIDController();
 
-    //Encoder object created to dispaly position values
+    // Encoder object created to display position values
     m_encoder = m_motor.getEncoder();
 
-    //PID coefficients
+    // PID coefficients
     kP = 0.1;
     kI = 1e-4;
     kD = 1;
@@ -59,12 +69,12 @@ public class ElevatorSubsytem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
- 
+
   }
 
   public void setSetpoint(double distance) {
-  // m_pid
-  m_pidController.setReference(distance, CANSparkMax.ControlType.kPosition);
-}
+    // m_pid
+    m_pidController.setReference(distance, CANSparkMax.ControlType.kPosition);
+  }
 
 }

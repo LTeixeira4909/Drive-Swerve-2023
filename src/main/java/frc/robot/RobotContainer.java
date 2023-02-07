@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.cone1;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
 /**
@@ -31,8 +32,8 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
 
-  // private final XboxController m_controller = new XboxController(0);
-  private final Joystick m_driver = new Joystick(0);
+  private final CommandXboxController m_controller = new CommandXboxController(0);
+  // private final Joystick m_driver = new Joystick(0);
 
   private final DrivetrainSubsystem m_drivetrainSubsystem = DrivetrainSubsystem.getInstance();
 
@@ -41,7 +42,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
 
-    m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(m_driver));
+    m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(m_controller.getHID()));
     // Set up the default command for the drivetrain.
     // The controls are for field-oriented driving:
     // Left stick Y axis -> forward and backwards movement
@@ -69,8 +70,11 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
+    m_controller.a().onTrue(new cone1(100));
+    m_controller.b().onTrue(new cone1(200));
   }
-
+    
+    
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
@@ -104,6 +108,9 @@ public class RobotContainer {
  
  
   }
+
+
+
   public void teleopPeriodic(){
     // m_intake.setDR();
 
@@ -137,8 +144,6 @@ public class RobotContainer {
  
  
   }
-
-
 
 
 

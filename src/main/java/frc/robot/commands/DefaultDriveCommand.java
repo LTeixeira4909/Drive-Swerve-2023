@@ -1,6 +1,6 @@
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.DrivetrainSubsystem;
 
@@ -8,9 +8,9 @@ public class DefaultDriveCommand extends CommandBase {
 
     private final DrivetrainSubsystem m_drivetrainSubsystem;
 
-    Joystick m_driver;
+    GenericHID m_driver;
 
-    public DefaultDriveCommand(Joystick driver) {
+    public DefaultDriveCommand(GenericHID driver) {
         m_drivetrainSubsystem = DrivetrainSubsystem.getInstance();
         m_driver = driver;
 
