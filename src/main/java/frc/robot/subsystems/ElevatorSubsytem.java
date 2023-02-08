@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -14,8 +15,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsytem extends SubsystemBase {
-  public CANSparkMax m_leadMotor;
-  public CANSparkMax m_followMotor;
+  public TalonFX m_leadMotor;
+  public TalonFX m_followMotor;
 
   public static final int leadDeviceID = 1;
   public static final int followDeviceID = 2;
@@ -35,11 +36,11 @@ public class ElevatorSubsytem extends SubsystemBase {
 
   /** Creates a new ElevatorSubsytem. */
   public ElevatorSubsytem() {
-    m_leadMotor = new CANSparkMax(leadDeviceID, MotorType.kBrushless);
-    m_followMotor = new CANSparkMax(followDeviceID, MotorType.kBrushless);
+    m_leadMotor = new TalonFX(leadDeviceID,"CANivore1");
+    m_followMotor = new TalonFX(followDeviceID,"CANivore1" );
 
-    m_leadMotor.restoreFactoryDefaults();
-    m_followMotor.restoreFactoryDefaults();
+    m_leadMotor.configFactoryDefault();
+    m_followMotor.configFactoryDefault();
 
     m_followMotor.follow(m_leadMotor);
 
