@@ -20,7 +20,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
  * project.
  */
 public class Robot extends TimedRobot {
-  private final Intake m_intake = Intake.getInstance();
+ // private final Intake m_intake = Intake.getInstance();
   private Command m_autonomousCommand;
   
     TalonSRX _talon0 = new TalonSRX(0); // Change '0' to match device ID in Tuner.  Use VictorSPX for Victor SPXs
@@ -43,23 +43,23 @@ public class Robot extends TimedRobot {
     double stick = _joystick.getRawAxis(1);
     _talon0.set(ControlMode.PercentOutput, stick);
 
-    if(_joystick.a().getAsBoolean()){
-      m_intake.setDR(Constants.DR_SPEED, true);
-      m_intake.setWW(Constants.WW_SPEED);
-    } else if(_joystick.b().getAsBoolean()){
-      m_intake.setDR(Constants.DR_SPEED, false);
-      m_intake.setWW(Constants.WW_SPEED);
-    } else if(_joystick.x().getAsBoolean()){
-      m_intake.setDR(-Constants.DR_SPEED, false);
-      m_intake.setWW(-Constants.WW_SPEED);
-    } else if(_joystick.y().getAsBoolean()){
-      m_intake.setDR(-Constants.DR_SPEED, true
-      );
-      m_intake.setWW(-Constants.WW_SPEED);
-    } else{
-      m_intake.setDR(0, true);
-      m_intake.setWW(0);
-    }
+    // if(_joystick.a().getAsBoolean()){
+    //   m_intake.setDR(Constants.DR_SPEED, true);
+    //   m_intake.setWW(Constants.WW_SPEED);
+    // } else if(_joystick.b().getAsBoolean()){
+    //   m_intake.setDR(Constants.DR_SPEED, false);
+    //   m_intake.setWW(Constants.WW_SPEED);
+    // } else if(_joystick.x().getAsBoolean()){
+    //   m_intake.setDR(-Constants.DR_SPEED, false);
+    //   m_intake.setWW(-Constants.WW_SPEED);
+    // } else if(_joystick.y().getAsBoolean()){
+    //   m_intake.setDR(-Constants.DR_SPEED, true
+    //   );
+    //   m_intake.setWW(-Constants.WW_SPEED);
+    // } else{
+    //   m_intake.setDR(0, true);
+    //   m_intake.setWW(0);
+    // }
   }
 
   /**

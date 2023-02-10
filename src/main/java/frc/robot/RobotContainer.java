@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.cone1;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.ElevatorSubsytem;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -36,13 +37,16 @@ public class RobotContainer {
   // private final Joystick m_driver = new Joystick(0);
 
   private final DrivetrainSubsystem m_drivetrainSubsystem = DrivetrainSubsystem.getInstance();
+  
+  private final ElevatorSubsytem m_elevatorSubsystem;
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   public RobotContainer() {
-
+    m_elevatorSubsystem = ElevatorSubsytem.getInstance();
     m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(m_controller.getHID()));
+    //ElevatorSubsystem.setDefaultCommand(new ElevatorSubsystemCommand(m_controller.getHID()));
     // Set up the default command for the drivetrain.
     // The controls are for field-oriented driving:
     // Left stick Y axis -> forward and backwards movement
@@ -70,8 +74,9 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_controller.a().onTrue(new cone1(100));
-    m_controller.b().onTrue(new cone1(200));
+    m_controller.a().onTrue(new cone1(17720));
+    m_controller.b().onTrue(new cone1(28813));
+    m_controller.y().onTrue(new cone1(232));
   }
     
     

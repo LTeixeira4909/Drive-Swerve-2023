@@ -4,28 +4,27 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
-import edu.wpi.first.cscore.VideoEvent.Kind;
-import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class ElevatorSubsytem extends SubsystemBase {
   public TalonFX m_leadMotor;
   public TalonFX m_followMotor;
 
-  public static final int leadDeviceID = 1;
-  public static final int followDeviceID = 2;
-  public CANSparkMax m_motor;
-  public SparkMaxPIDController m_pidController;
-  public RelativeEncoder m_encoder;
+  public static final int leadDeviceID = 9;
+  public static final int followDeviceID = 10;
+
   public double kP, kI, kD, kIz, kFF, kMaxOutput, kMinOutput;
 
+  double m_leadMotorKp = .2;
+  double m_leadMotorKI = 0;
+  double m_leadMotorKD = 0.1;
   private static ElevatorSubsytem m_inst = null;
+
+  double m_setpoint = 0;
 
   public static ElevatorSubsytem getInstance() {
     if (m_inst == null) {
@@ -35,47 +34,37 @@ public class ElevatorSubsytem extends SubsystemBase {
   }
 
   /** Creates a new ElevatorSubsytem. */
-  public ElevatorSubsytem() {
-    m_leadMotor = new TalonFX(leadDeviceID,"CANivore1");
-    m_followMotor = new TalonFX(followDeviceID,"CANivore1" );
+  private ElevatorSubsytem() {
+    m_leadMotor = new TalonFX(leadDeviceID, "CANivore1");
+    m_followMotor = new TalonFX(followDeviceID, "CANivore1");
 
     m_leadMotor.configFactoryDefault();
     m_followMotor.configFactoryDefault();
 
     m_followMotor.follow(m_leadMotor);
+    m_followMotor.setInverted(true);
 
-    m_pidController = m_motor.getPIDController();
+    m_leadMotor.config_kP(0, m_leadMotorKp);
+    m_leadMotor.config_kI(0, m_leadMotorKI);
+    m_leadMotor.config_kD(0, m_leadMotorKD);
 
-    // Encoder object created to display position values
-    m_encoder = m_motor.getEncoder();
+    m_leadMotor.configClosedLoopPeakOutput(0, .5);
+    // m_leadMotor.configClosedloopRamp()
 
-    // PID coefficients
-    kP = 0.1;
-    kI = 1e-4;
-    kD = 1;
-    kIz = 0;
-    kFF = 0;
-    kMaxOutput = 1;
-    kMinOutput = -1;
-
-    m_pidController.setP(kP);
-    m_pidController.setI(kI);
-    m_pidController.setD(kD);
-    m_pidController.setIZone(kIz);
-    m_pidController.setFF(kFF);
-    m_pidController.setOutputRange(kMinOutput, kMaxOutput);
+    m_leadMotor.set(TalonFXControlMode.PercentOutput, 0);
 
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
+    SmartDashboard.putNumber("elevatorSetpoint", m_setpoint);
+    SmartDashboard.putNumber("elevatorError", m_leadMotor.getClosedLoopError());
+    SmartDashboard.putNumber("elevatorEncoder", m_leadMotor.getSelectedSensorPosition());
   }
 
   public void setSetpoint(double distance) {
-    // m_pid
-    m_pidController.setReference(distance, CANSparkMax.ControlType.kPosition);
+   m_leadMotor.set(TalonFXControlMode.Position, distance);
+   m_setpoint = distance;
   }
-
 }
