@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.IntakeDeploy;
+import frc.robot.commands.RunIntakeRollers;
 import frc.robot.commands.cone1;
 import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.ElevatorSubsytem;
@@ -77,7 +79,29 @@ public class RobotContainer {
     m_controller.a().onTrue(new cone1(17720));
     m_controller.b().onTrue(new cone1(28813));
     m_controller.y().onTrue(new cone1(232));
-  }
+
+     //cone intake down and roller on
+     m_driverController.rightTrigger().onTrue(new IntakeDeploy(12345).andThen(new RunIntakeRollers(0.5, -0.5)));
+     //intake up and roller off
+     m_driverController.rightTrigger().onFalse(new IntakeDeploy(42).andThen(new RunIntakeRollers(0, 0)));
+     //Cube intake down and roller on
+     m_driverController.rightBumper().onTrue(new IntakeDeploy(12345).andThen(new RunIntakeRollers(0.5, 0.5)));
+     //intake up and roller off
+     m_driverController.rightBumper().onFalse(new IntakeDeploy(42).andThen(new RunIntakeRollers(0, 0)));
+     
+     //intake down and spits cone
+     m_driverController.leftTrigger().onTrue(new IntakeDeploy(12345).andThen(new RunIntakeRollers(-0.5, 0.5)));
+     //Intake up and rollers off
+     m_driverController.leftTrigger().onFalse(new IntakeDeploy(42).andThen(new RunIntakeRollers(0, 0)));
+     //Intake down and spits cube
+     m_driverController.leftBumper().onTrue(new IntakeDeploy(12345).andThen(new RunIntakeRollers(-0.5, 0.5)));
+     //Intake up and rollers off
+     m_driverController.leftBumper().onFalse(new IntakeDeploy(42).andThen(new RunIntakeRollers(0, 0)));
+     // m_driverController.b().onTrue(new IntakeDeploy(28813));
+     // m_driverController.y().onTrue(new IntakeDeploy(232));
+   }
+ 
+  
     
     
   /**

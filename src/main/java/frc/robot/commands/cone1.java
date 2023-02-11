@@ -9,10 +9,10 @@ import frc.robot.subsystems.ElevatorSubsytem;
 
 public class cone1 extends CommandBase {
   ElevatorSubsytem m_elev;
-  int m_billy;
+  int m_setpoint;
 
   public cone1(int setpoint) {
-    m_billy = setpoint;
+    m_setpoint = setpoint;
     m_elev = ElevatorSubsytem.getInstance();
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(m_elev);
@@ -26,7 +26,7 @@ public class cone1 extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_elev.setSetpoint(m_billy);
+    m_elev.setSetpoint(m_setpoint);
      
   
   }
