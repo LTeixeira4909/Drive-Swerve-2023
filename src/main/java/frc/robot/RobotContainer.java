@@ -37,10 +37,9 @@ public class RobotContainer {
 
   // private final XboxController m_controller = new XboxController(0);
   private final CommandXboxController m_driver = new CommandXboxController(0);
+  private final CommandXboxController m_operator = new CommandXboxController(1);
 
   private final DrivetrainSubsystem m_drivetrainSubsystem = DrivetrainSubsystem.getInstance();
-
-  CANSparkMax spark = new CANSparkMax(0, MotorType.kBrushless);
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -67,12 +66,10 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-     
-     
-   
-    //m_chooser.addOption("Complex Auto", m_drivetrainSubsystem.traj(PathPlanner.loadPath("Angle Path", new PathConstraints(4, 3)), true));
+    // m_chooser.addOption("Complex Auto",
+    // m_drivetrainSubsystem.traj(PathPlanner.loadPath("Angle Path", new
+    // PathConstraints(4, 3)), true));
 
-    
     addAutoPath("this path does not exist");
     addAutoPath("Rotate 90 Path");
     addAutoPath("1 Meter Path");
@@ -81,22 +78,23 @@ public class RobotContainer {
     addAutoPath("simple charge station");
     addAutoPath("double score charge station");
     addAutoPath("double score charge station HP");
-    m_chooser.setDefaultOption("Default Auto", m_drivetrainSubsystem.traj(PathPlanner.loadPath("1 Meter Path", new PathConstraints(4, 3)), true));
+    m_chooser.setDefaultOption("Default Auto",
+        m_drivetrainSubsystem.traj(PathPlanner.loadPath("1 Meter Path", new PathConstraints(4, 3)), true));
     SmartDashboard.putData(m_chooser);
 
-    
   }
-  public void addAutoPath(String pathName){
+
+  public void addAutoPath(String pathName) {
     var fred = PathPlanner.loadPath(pathName, new PathConstraints(4, 3));
-    if ( fred == null){
-     System.out.println("unable to load path"+pathName);
-    }
-    else {
+    if (fred == null) {
+      System.out.println("unable to load path" + pathName);
+    } else {
       Command autoCmd = m_drivetrainSubsystem.traj(fred, true);
       autoCmd.setName(pathName);
       m_chooser.addOption(pathName, autoCmd);
     }
   }
+
   /**
    * Use this method to define your button->command mappings. Buttons can be
    * created by
@@ -106,8 +104,22 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-    m_driver.a().onTrue(new InstantCommand(() -> spark.set(0.5)));
+
     m_driver.b().onTrue(new BalanceCommand());
+
+    // Double square is back
+    // 3 lines is start
+
+    // we chose the lambda "() ->" format over the "::" format so we can pass values
+    // to the methods which need them
+    m_driver.back().onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyro()));
+    // This is another way to do the same as above:
+    // m_driver.back().onTrue(new InstantCommand(m_drivetrainSubsystem::zeroGyro));
+
+    m_driver.back().onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyro()));
+
+    m_driver.rightBumper().onTrue(new InstantCommand(() -> m_drivetrainSubsystem.setDriveRate(0.3)))
+        .onFalse(new InstantCommand(() -> m_drivetrainSubsystem.setDriveRate(1)));
   }
 
   /**
@@ -116,24 +128,26 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Our Path", new PathConstraints(4, 3)), true);
-    //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Left 7 Path", new PathConstraints(4, 3)), true);
-    //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Angle Path", new PathConstraints(4, 3)), true);
-    //return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Rotate 90 Path", new PathConstraints(4, 3)), true);
- 
+    // return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Our Path", new
+    // PathConstraints(4, 3)), true);
+    // return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Left 7 Path", new
+    // PathConstraints(4, 3)), true);
+    // return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Angle Path", new
+    // PathConstraints(4, 3)), true);
+    // return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Rotate 90 Path", new
+    // PathConstraints(4, 3)), true);
+
     return m_chooser.getSelected();
   }
 
-    public String getSelectedAuto() {
-      // String autoName = m_chooser.getSelected().getName();
-      Command autoCmd = m_chooser.getSelected();
-      if (autoCmd == null) {
-        return "No Auto Selected";
-      }
-      else {
-        return autoCmd.getName();
-      }
+  public String getSelectedAuto() {
+    // String autoName = m_chooser.getSelected().getName();
+    Command autoCmd = m_chooser.getSelected();
+    if (autoCmd == null) {
+      return "No Auto Selected";
+    } else {
+      return autoCmd.getName();
     }
+  }
 
-  
 }

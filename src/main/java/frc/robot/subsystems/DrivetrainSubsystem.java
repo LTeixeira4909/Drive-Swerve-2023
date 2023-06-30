@@ -71,9 +71,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SlewRateLimiter leftRightRateLimiter = new SlewRateLimiter(0.5);
     SlewRateLimiter turnRateLimiter = new SlewRateLimiter(0.5);
 
-    Pigeon2 pigeon = new Pigeon2(20, "CANivore1");
+    Pigeon2 pigeon = new Pigeon2(20);
     //Global variable for drive rate speed
-    double g_driveRate;
+    double m_driveRate = 1;
 
     public Rotation2d getGyroHeading() {
         // // Get my gyro angle. We are negating the value because gyros return positive
@@ -148,26 +148,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         field.setRobotPose(m_odometry.getPoseMeters());
         SmartDashboard.putData(field);
         // Update the pose
-        // button 8 on xbox is three lines button
-        if (js0.getRawButton(8)) {
-            leftModule.resetTurnEncoders();
-            rightModule.resetTurnEncoders();
-            backRightModule.resetTurnEncoders();
-            backLeftModule.resetTurnEncoders();
-        }
-        // button 7 on xbox is two squares
-        if (js0.getRawButton(7)) {
-            pigeon.setYaw(0);
-        }
-        //Button 6 is right bumper/slow button
-        //Speed is multiplied by 0.3 when held down
-        if (js0.getRawButton(6)) {
-            setDriveRate(0.3);
-        }
-        else {
-            setDriveRate(1);
-        }
-
+      
         SmartDashboard.putString("odo", m_odometry.getPoseMeters().toString());
         SmartDashboard.putString("odo", m_odometry.getPoseMeters().toString());
         // SmartDashboard.putNumber("Pose roation", m_pose.getRotation().getDegrees()) ;
@@ -291,10 +272,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     }
 
     public void setDriveRate(double driveRate) {
-        g_driveRate = driveRate;
+        m_driveRate = driveRate;
     }
     public double getDriveRate() {
-        return g_driveRate;
+        return m_driveRate;
     }
+    
+
+    public void zeroGyro() {
+        pigeon.setYaw(0d);
+    }
+    
 
 }
