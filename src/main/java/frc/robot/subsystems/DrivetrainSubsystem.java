@@ -55,10 +55,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     Joystick js0 = new Joystick(0);
 
 
-    private final double FRONT_LEFT_ENC_OFFSET = 301.8;
-    private final double FRONT_RIGHT_ENC_OFFSET = 243.7;
-    private final double BACK_RIGHT_ENC_OFFSET = 306.8;
-    private final double BACK_LEFT_ENC_OFFSET = 308;   
+    private final double FRONT_LEFT_ENC_OFFSET = 103.6;
+    private final double FRONT_RIGHT_ENC_OFFSET = 6.1;
+    private final double BACK_RIGHT_ENC_OFFSET = 276.4;
+    private final double BACK_LEFT_ENC_OFFSET = 70.2;   
 
     Module leftModule = new Module("FrontLeft", 7, 8, 14, FRONT_LEFT_ENC_OFFSET);
     Module rightModule = new Module("FrontRight", 2, 1, 11, FRONT_RIGHT_ENC_OFFSET);
@@ -193,9 +193,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     public void DriveWithJoystick(CommandXboxController js) {
 
-        double leftRightDir = -1 * getDriveRate() * js.getRawAxis(0); // positive number means left
-        double fwdBackDir = -1 * getDriveRate() * js.getRawAxis(1); // positive number means fwd
-        double turn = -1 * getDriveRate() * js.getRawAxis(4); // positive number means clockwise
+        double leftRightDir = 1 * getDriveRate() * js.getRawAxis(0); // positive number means left
+        double fwdBackDir = 1 * getDriveRate() * js.getRawAxis(1); // positive number means fwd
+        double turn = 1 * getDriveRate() * js.getRawAxis(4); // positive number means clockwise
 
         // fwdBackDir = fwdBakRateLimiter.calculate(fwdBackDir);
         // leftRightDir = leftRightRateLimiter.calculate(leftRightDir);
@@ -218,7 +218,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         // Example chassis speeds: 1 meter per second forward, 3 meters
         // per second to the left, and rotation at 1.5 radians per second
         // counteclockwise.
-        // ChassisSpeeds speeds = new ChassisSpeeds(fwdBackDir, leftRightDir, turn);
+        //ChassisSpeeds speeds = new ChassisSpeeds(fwdBackDir, leftRightDir, turn);
 
         
 
