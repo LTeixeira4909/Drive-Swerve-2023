@@ -17,7 +17,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.CubeShooter;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.CubeShooter.CubeShooterStates;
+import frc.robot.Constants.CubeShooterConstants;
 import frc.robot.commands.BalanceCommand;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -107,6 +110,9 @@ public class RobotContainer {
   private void configureButtonBindings() {
 
     m_driver.b().onTrue(new BalanceCommand());
+    m_operator.povLeft()
+        .onTrue(new InstantCommand(() -> CubeShooter.getInstance().setState(CubeShooterStates.SCOREHIGH)))
+        .onFalse(new InstantCommand(() -> CubeShooter.getInstance().setState(CubeShooterStates.RETRACTED)));
 
     // Double square is back
     // 3 lines is start
