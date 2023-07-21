@@ -43,12 +43,14 @@ public class RobotContainer {
   private final CommandXboxController m_operator = new CommandXboxController(1);
 
   private final DrivetrainSubsystem m_drivetrainSubsystem = DrivetrainSubsystem.getInstance();
+  public static final CubeShooter m_cubeShooterSubsystem = new CubeShooter();
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
+
   public RobotContainer() {
 
     m_drivetrainSubsystem.setDefaultCommand(new DefaultDriveCommand(m_driver));
@@ -111,8 +113,8 @@ public class RobotContainer {
 
     m_driver.b().onTrue(new BalanceCommand());
     m_operator.povLeft()
-        .onTrue(new InstantCommand(() -> CubeShooter.getInstance().setState(CubeShooterStates.SCOREHIGH)))
-        .onFalse(new InstantCommand(() -> CubeShooter.getInstance().setState(CubeShooterStates.RETRACTED)));
+        .onTrue(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.SCOREHIGH)))
+        .onFalse(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.RETRACTED)));
 
     // Double square is back
     // 3 lines is start
