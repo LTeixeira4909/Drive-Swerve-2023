@@ -110,10 +110,15 @@ public class RobotContainer {
    * edu.wpi.first.wpilibj2.command.button.JoystickButton}.
    */
   private void configureButtonBindings() {
-
+    m_driver.leftTrigger()
+        .onTrue(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.INTAKE)))
+        .onFalse(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.RETRACTED)));
     m_driver.b().onTrue(new BalanceCommand());
     m_operator.povLeft()
         .onTrue(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.SCOREHIGH)))
+        .onFalse(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.RETRACTED)));
+    m_operator.povRight()
+        .onTrue(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.SCOREMID)))
         .onFalse(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.RETRACTED)));
 
     // Double square is back

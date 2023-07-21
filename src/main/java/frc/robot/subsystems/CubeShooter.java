@@ -53,9 +53,11 @@ public class CubeShooter extends SubsystemBase {
     INTAKE("Intake"), // picking cube up off the floor
     SPIT("Spit"), // eject a cube at the floor level for the hybrid node
     SCOREMID("ScoreMid"), // shooting angle
-    SCOREHIGH("Scorehigh");
+    SCOREHIGH("Scorehigh"),
+    GOHIGH("GoHigh"),
+    GOMID("Gomid");
 
-    String stateName;
+    private String stateName;
 
     private CubeShooterStates(String name) {
       this.stateName = name;
@@ -101,13 +103,17 @@ public class CubeShooter extends SubsystemBase {
         break;
       case SCOREHIGH:
         m_angleSetpoint = CubeShooterConstants.SCOREHIGH_SETPOINT;
-        m_bottomRollerSpeed = .75;
-        m_topRollerSpeed = .75;
+        // m_bottomRollerSpeed = .90;
+        // m_topRollerSpeed = .90;
+        break;
+      case GOHIGH:
+        m_angleSetpoint = CubeShooterConstants.GOHIGH_SETPOINT;
         break;
       case SCOREMID:
-        m_angleSetpoint = CubeShooterConstants.SCOREMID_SETPOINT;
-        m_bottomRollerSpeed = 0.45;
-        m_topRollerSpeed = 0.45;
+        m_bottomRollerSpeed = 0.38;
+        m_topRollerSpeed = 0.38;
+      case GOMID:
+        m_angleSetpoint = CubeShooterConstants.GOMID_SETPOINT;
         break;
       case SPIT:
         m_angleSetpoint = CubeShooterConstants.SPIT_SETPOINT;

@@ -23,12 +23,12 @@ public final class Constants {
         public static final int BOTTOM_ROLLER_MOTOR = 16;
 
         public static final double RETRACTED_SETPOINT = 104;
-        public static final double SPIT_SETPOINT = 5.0;
+        public static final double SPIT_SETPOINT = 10.0;
         public static final double INTAKE_SETPOINT = SPIT_SETPOINT;
         public static final double CUBE_MID = 75;
 
-        public static final double SCOREHIGH_SETPOINT = 1;
-        public static final double SCOREMID_SETPOINT = 1;
+        public static final double SCOREHIGH_SETPOINT = 104;
+        public static final double SCOREMID_SETPOINT = 75;
 
         public static final double OUTPUT_LIMIT = 0.4;
         public static final double kP = 0.011; // 0.04 / 4;
@@ -38,5 +38,7 @@ public final class Constants {
         public static final double DEGREE_RANGE = 111.0; // the overall range of the pivot from cad
         public static final double TICK_RANGE = 16.545471; // the corresponding range of ticks that the pivot can move
         public static final double DEGREES_PER_TICK = DEGREE_RANGE / TICK_RANGE;
+        public static final double GOHIGH_SETPOINT = 104;
+        public static final double GOMID_SETPOINT = 75;
     }
 }
