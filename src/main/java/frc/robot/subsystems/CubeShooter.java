@@ -8,6 +8,7 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CubeShooterConstants;
@@ -15,7 +16,6 @@ import frc.robot.Constants.CubeShooterConstants;
 public class CubeShooter extends SubsystemBase {
   private double m_angleSetpoint, m_topRollerSpeed, m_bottomRollerSpeed;
   private final CANSparkMax m_cubePivot, m_topRoller, m_bottomRoller;
-  private static CubeShooter m_instance;
 
   private CubeShooterStates m_currentState, m_lastState;
 
@@ -25,8 +25,26 @@ public class CubeShooter extends SubsystemBase {
     m_topRoller = new CANSparkMax(CubeShooterConstants.TOP_ROLLER_MOTOR, MotorType.kBrushless);
     m_bottomRoller = new CANSparkMax(CubeShooterConstants.BOTTOM_ROLLER_MOTOR, MotorType.kBrushless);
 
-    m_currentState = CubeShooterStates.RETRACTED;
+    m_cubePivot.restoreFactoryDefaults();
+
+    // Set PID Constants
+    m_cubePivot.getPIDController().setP(CubeShooterConstants.kP);
+    m_cubePivot.getPIDController().setD(CubeShooterConstants.kD);
+
+    // Max speed the PID will generate
+    m_cubePivot.getPIDController().setOutputRange(-CubeShooterConstants.OUTPUT_LIMIT,
+        CubeShooterConstants.OUTPUT_LIMIT);
+
+    // set the degrees per tick so we can control the pivot in degrees
+    m_cubePivot.getEncoder().setPositionConversionFactor(CubeShooterConstants.DEGREES_PER_TICK);
+
+    // set the overall degree range of the pivot
+    m_cubePivot.getEncoder().setPosition(CubeShooterConstants.DEGREE_RANGE);
+
     m_cubePivot.setInverted(false);
+
+    // starting state
+    m_currentState = CubeShooterStates.RETRACTED;
   }
 
   public enum CubeShooterStates {
@@ -56,6 +74,8 @@ public class CubeShooter extends SubsystemBase {
     m_topRoller.set(m_topRollerSpeed);
     m_bottomRoller.set(m_bottomRollerSpeed);
 
+    SmartDashboard.putNumber("cube Shooter/Pivot setpoint", m_angleSetpoint);
+    SmartDashboard.putNumber("cube Shooter/Pivot position", m_cubePivot.getEncoder().getPosition());
   }
 
   private void stateMachine() {
@@ -102,10 +122,4 @@ public class CubeShooter extends SubsystemBase {
     m_currentState = newState;
   }
 
-  public static CubeShooter getInstance() {
-    if (m_instance == null) {
-      m_instance = new CubeShooter();
-    }
-    return m_instance;
-  }
 }

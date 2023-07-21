@@ -30,5 +30,13 @@ public final class Constants {
         public static final double SCOREHIGH_SETPOINT = 1;
         public static final double SCOREMID_SETPOINT = 1;
 
+        public static final double OUTPUT_LIMIT = 0.4;
+        public static final double kP = 0.011; // 0.04 / 4;
+        public static final double kD = 0.9;
+        public static final double kG = 0.25;
+
+        public static final double DEGREE_RANGE = 111.0; // the overall range of the pivot from cad
+        public static final double TICK_RANGE = 16.545471; // the corresponding range of ticks that the pivot can move
+        public static final double DEGREES_PER_TICK = DEGREE_RANGE / TICK_RANGE;
     }
 }
