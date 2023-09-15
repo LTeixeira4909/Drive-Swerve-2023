@@ -30,7 +30,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // private static DrivetrainSubsystem instance = null;
 
     // double wheelBase = 31.625 * 0.0254;
-    double wheelBase = 26.0 * 0.0254;
+    double wheelBase = 20.0 * 0.0254;
     // Locations for the swerve drive modules relative to the robot center.
     Translation2d m_frontLeftLocation = new Translation2d(wheelBase, wheelBase);
     Translation2d m_frontRightLocation = new Translation2d(wheelBase, -wheelBase);
@@ -55,10 +55,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     Joystick js0 = new Joystick(0);
 
 
-    private final double FRONT_LEFT_ENC_OFFSET = 103.6;
-    private final double FRONT_RIGHT_ENC_OFFSET = 6.1;
-    private final double BACK_RIGHT_ENC_OFFSET = 276.4;
-    private final double BACK_LEFT_ENC_OFFSET = 70.2;   
+    private final double FRONT_LEFT_ENC_OFFSET = 52;
+    private final double FRONT_RIGHT_ENC_OFFSET = 71.9;
+    private final double BACK_RIGHT_ENC_OFFSET = 309;
+    private final double BACK_LEFT_ENC_OFFSET = -90;   
 
     Module leftModule = new Module("FrontLeft", 7, 8, 14, FRONT_LEFT_ENC_OFFSET);
     Module rightModule = new Module("FrontRight", 2, 1, 11, FRONT_RIGHT_ENC_OFFSET);
