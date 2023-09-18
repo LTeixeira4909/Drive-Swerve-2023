@@ -74,6 +74,7 @@ public class Module {
         SmartDashboard.putNumber(m_name + " error", turnMotor.getClosedLoopError());
         SmartDashboard.putNumber(m_name + " error deg", DrivetrainSubsystem.convertTicksToDegrees(turnMotor.getClosedLoopError()));
         SmartDashboard.putNumber(m_name + " turnMotor", DrivetrainSubsystem.convertTicksToDegrees(turnMotor.getSelectedSensorPosition()));
+        
     }
 
     public final double MAX_VOLTAGE = 8;

@@ -55,10 +55,10 @@ public class DrivetrainSubsystem extends SubsystemBase {
     Joystick js0 = new Joystick(0);
 
 
-    private final double FRONT_LEFT_ENC_OFFSET = 52;
-    private final double FRONT_RIGHT_ENC_OFFSET = 71.9;
-    private final double BACK_RIGHT_ENC_OFFSET = 309;
-    private final double BACK_LEFT_ENC_OFFSET = -90;   
+    private final double FRONT_LEFT_ENC_OFFSET = 67.5;
+    private final double FRONT_RIGHT_ENC_OFFSET = 76.9;
+    private final double BACK_RIGHT_ENC_OFFSET = -39.9;
+    private final double BACK_LEFT_ENC_OFFSET = 248.2;   
 
     Module leftModule = new Module("FrontLeft", 7, 8, 14, FRONT_LEFT_ENC_OFFSET);
     Module rightModule = new Module("FrontRight", 2, 1, 11, FRONT_RIGHT_ENC_OFFSET);
