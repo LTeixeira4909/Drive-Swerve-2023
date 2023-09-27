@@ -41,4 +41,18 @@ public final class Constants {
         public static final double GOHIGH_SETPOINT = 104;
         public static final double GOMID_SETPOINT = 75;
     }
+
+    // -----------------------------------------------------------------------\\
+
+    public static final class ArmConstants {
+        public static final int ARM_MOTOR = 18;
+
+        public static final double ARM_RETRACTED = 1;
+        public static final double ARM_EXTENDED = 0;
+        public static final double ARM_MID = 0;
+        public static final double ARM_HIGH = 10;
+
+        public static final double ARM_CALIBRATE = 0;
+
+    }
 }
