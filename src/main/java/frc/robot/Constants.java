@@ -44,11 +44,17 @@ public final class Constants {
 public class IntakeConstants {
     public static final int INTAKE_ROLLLERS = 1;
 }
+    // -----------------------------------------------------------------------\\
 
+    public static final class ArmConstants {
+        public static final int ARM_MOTOR = 18;
 
+        public static final double ARM_RETRACTED = 1;
+        public static final double ARM_EXTENDED = 0;
+        public static final double ARM_MID = 0;
+        public static final double ARM_HIGH = 10;
+        public static final double ARM_SPIT = 0;
+        public static final double ARM_CALIBRATE = 0;
 
-
-
-
-
+    }
 }

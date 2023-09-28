@@ -17,8 +17,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.ExampleCommand;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.CubeShooter;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.Arm.armStates;
 import frc.robot.subsystems.CubeShooter.CubeShooterStates;
 import frc.robot.Constants.CubeShooterConstants;
 import frc.robot.commands.BalanceCommand;
@@ -123,17 +125,21 @@ public class RobotContainer {
 
     // Double square is back
     // 3 lines is start
-
-    // we chose the lambda "() ->" format over the "::" format so we can pass values
-    // to the methods which need them
-    m_driver.back().onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyro()));
     // This is another way to do the same as above:
     // m_driver.back().onTrue(new InstantCommand(m_drivetrainSubsystem::zeroGyro));
+    // we chose the lambda "() ->" format over the "::" format so we can pass values
+    // to the methods which need them
 
     m_driver.back().onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyro()));
+    m_driver.rightTrigger()
+        .onTrue(new InstantCommand(() -> Arm.getInstance().setArmState(armStates.ARM_RETRACTED)));
+    m_driver.rightBumper()
+        .onTrue(new InstantCommand(() -> Arm.getInstance().setArmState(armStates.ARM_HIGH)));
+    m_driver.leftBumper()
+        .onTrue(new InstantCommand(() -> Arm.getInstance().setArmState(armStates.ARM_MID)));
+    m_driver.leftTrigger()
+        .onTrue(new InstantCommand(() -> Arm.getInstance().setArmState(armStates.ARM_SPIT)));
 
-    m_driver.rightBumper().onTrue(new InstantCommand(() -> m_drivetrainSubsystem.setDriveRate(0.3)))
-        .onFalse(new InstantCommand(() -> m_drivetrainSubsystem.setDriveRate(1)));
   }
 
   /**

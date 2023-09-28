@@ -11,7 +11,7 @@ import frc.robot.Constants.IntakeConstants;;
 public class Intake {
 
     private final CANSparkMax m_intakeRollers;
-
+    private static Intake m_instance;
     private IntakeStates m_currentState, m_lastState;
 
     public Intake(){
@@ -33,15 +33,6 @@ public class Intake {
         }
     }
 
-    // public class Intake {
-        // private IntakeStates m_currentState, m_lastState;
-        // private CANSparkMax m_intakeRollers;
-
-    //     public Intake() {
-    //         m_intakeRollers = new CANSparkMax(Intakeconstants.INTAKE_ROLLLERS, MotorType.kBrushless);
-    //     }
-    // }
-
     public void periodic() {
         stateMachine();
     }
@@ -62,7 +53,15 @@ public class Intake {
         }
     }
 
-    public void setState(IntakeStates newState) {
+    public void setIntakeState(IntakeStates newState) {
         m_currentState = newState;
     }
+    public static Intake getInstance() {
+        if (m_instance == null) {
+            m_instance = new Intake();
+        }
+        return m_instance;
+
+    }
 }
+
