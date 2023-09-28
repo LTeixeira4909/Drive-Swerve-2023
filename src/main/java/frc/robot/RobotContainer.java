@@ -20,8 +20,10 @@ import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.CubeShooter;
 import frc.robot.subsystems.DrivetrainSubsystem;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Arm.armStates;
 import frc.robot.subsystems.CubeShooter.CubeShooterStates;
+import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.Constants.CubeShooterConstants;
 import frc.robot.commands.BalanceCommand;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -116,9 +118,9 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.INTAKE)))
         .onFalse(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.RETRACTED)));
     m_driver.b().onTrue(new BalanceCommand());
-    m_operator.povLeft()
-        .onTrue(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.SCOREHIGH)))
-        .onFalse(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.RETRACTED)));
+    // m_operator.povLeft()
+    //     .onTrue(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.SCOREHIGH)))
+    //     .onFalse(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.RETRACTED)));
     m_operator.povRight()
         .onTrue(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.SCOREMID)))
         .onFalse(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.RETRACTED)));
@@ -130,7 +132,8 @@ public class RobotContainer {
     // we chose the lambda "() ->" format over the "::" format so we can pass values
     // to the methods which need them
 
-    m_driver.back().onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyro()));
+    m_driver.back()
+        .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyro()));
     m_driver.rightTrigger()
         .onTrue(new InstantCommand(() -> Arm.getInstance().setArmState(armStates.ARM_RETRACTED)));
     m_driver.rightBumper()
@@ -139,7 +142,10 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> Arm.getInstance().setArmState(armStates.ARM_MID)));
     m_driver.leftTrigger()
         .onTrue(new InstantCommand(() -> Arm.getInstance().setArmState(armStates.ARM_SPIT)));
-
+    m_driver.x()
+        .onTrue(new InstantCommand(() -> Intake.getInstance().setIntakeState(IntakeStates.INTAKE)));
+    m_driver.y()
+        .onTrue(new InstantCommand(() -> Intake.getInstance().setIntakeState(IntakeStates.SPIT)));
   }
 
   /**
