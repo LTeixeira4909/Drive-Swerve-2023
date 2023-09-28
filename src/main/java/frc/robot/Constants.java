@@ -41,4 +41,14 @@ public final class Constants {
         public static final double GOHIGH_SETPOINT = 104;
         public static final double GOMID_SETPOINT = 75;
     }
+public class IntakeConstants {
+    public static final int INTAKE_ROLLLERS = 1;
+}
+
+
+
+
+
+
+
 }
