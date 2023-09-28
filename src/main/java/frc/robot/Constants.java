@@ -51,7 +51,7 @@ public final class Constants {
         public static final double ARM_EXTENDED = 0;
         public static final double ARM_MID = 0;
         public static final double ARM_HIGH = 10;
-
+        public static final double ARM_SPIT = 0;
         public static final double ARM_CALIBRATE = 0;
 
     }

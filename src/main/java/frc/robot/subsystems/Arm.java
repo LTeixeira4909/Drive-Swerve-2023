@@ -24,7 +24,8 @@ public class Arm extends SubsystemBase {
         ARM_RETRACTED("Retracted"), // inside fram perimiter, just off the hard stop
         ARM_EXTENDED("Extended"), // picking cube up off the floor
         ARM_MID("Mid"), // eject a cube at the floor level for the hybrid node
-        ARM_HIGH("High");
+        ARM_HIGH("High"),
+        ARM_SPIT("Spit");
 
         String stateName;
 
@@ -74,8 +75,10 @@ public class Arm extends SubsystemBase {
             case ARM_HIGH:
                 m_angleSetpoint = ArmConstants.ARM_HIGH;
                 break;
-            default:
+            case ARM_SPIT:
+                m_angleSetpoint = ArmConstants.ARM_SPIT;
                 break;
+
         }
     }
 
