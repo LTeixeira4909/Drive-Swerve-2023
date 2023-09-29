@@ -48,6 +48,8 @@ public class RobotContainer {
 
   private final DrivetrainSubsystem m_drivetrainSubsystem = DrivetrainSubsystem.getInstance();
   public static final CubeShooter m_cubeShooterSubsystem = new CubeShooter();
+  
+  public static final Arm m_ArmSubsystem = new Arm();
 
   SendableChooser<Command> m_chooser = new SendableChooser<>();
 
