@@ -41,20 +41,27 @@ public final class Constants {
         public static final double GOHIGH_SETPOINT = 104;
         public static final double GOMID_SETPOINT = 75;
     }
-public class IntakeConstants {
-    public static final int INTAKE_ROLLLERS = 1;
-}
+
     // -----------------------------------------------------------------------\\
 
     public static final class ArmConstants {
-        public static final int ARM_MOTOR = 18;
+        public static final int ARM_MOTOR = 2;
 
-        public static final double ARM_RETRACTED = 1;
+        public static final double ARM_RETRACTED = 4;
         public static final double ARM_EXTENDED = 0;
-        public static final double ARM_MID = 0;
-        public static final double ARM_HIGH = 100;
-        public static final double ARM_SPIT = 0;
+        public static final double ARM_MID = 26.4;
+        public static final double ARM_HIGH = 20.3;
+        public static final double ARM_SPIT = 36.3;
         public static final double ARM_CALIBRATE = 0;
+        public static final double kP = 0.08;
+        public static final double OUTPUT_LIMIT = 0.4;
 
+    }
+    //---------------------------------------------------------------\\
+    
+    public class IntakeConstants {
+        public static final int INTAKE_ROLLLERS = 1;
+        public static final int INTAKE = 10;
+        public static final int SPIT = 10;
     }
 }

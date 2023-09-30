@@ -5,17 +5,20 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.ArmConstants;
 
 /** Add your docs here. */
 public class Arm extends SubsystemBase {
     private double m_angleSetpoint;
     private final CANSparkMax m_armPivot;
-    private static Arm m_instance;
 
     private armStates m_currentState, m_lastState;
 
@@ -41,15 +44,20 @@ public class Arm extends SubsystemBase {
     /** Creates a new Arm. */
     public Arm() {
         m_armPivot = new CANSparkMax(ArmConstants.ARM_MOTOR, MotorType.kBrushless);
-
+        //new PIDController(Constants.ArmConstants.kP,0, 0);
         m_currentState = armStates.ARM_RETRACTED;
         m_armPivot.setInverted(false);
+        m_armPivot.getPIDController().setP(Constants.ArmConstants.kP);
+        m_armPivot.getPIDController().setOutputRange(-ArmConstants.OUTPUT_LIMIT,
+        ArmConstants.OUTPUT_LIMIT);
+
     }
 
     @Override
     public void periodic() {
         stateMachine();
         m_armPivot.getPIDController().setReference(m_angleSetpoint, ControlType.kPosition);
+        SmartDashboard.putNumber("Arm Angle", m_armPivot.getEncoder().getPosition());
     }
 
     private void stateMachine() {
@@ -86,11 +94,4 @@ public class Arm extends SubsystemBase {
         m_currentState = state;
     }
 
-    public static Arm getInstance() {
-        if (m_instance == null) {
-            m_instance = new Arm();
-        }
-        return m_instance;
-
-    }
 }
