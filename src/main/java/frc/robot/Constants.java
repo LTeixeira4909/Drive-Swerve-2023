@@ -57,11 +57,12 @@ public final class Constants {
         public static final double OUTPUT_LIMIT = 0.4;
 
     }
-    //---------------------------------------------------------------\\
-    
+    // ---------------------------------------------------------------\\
+
     public class IntakeConstants {
         public static final int INTAKE_ROLLLERS = 1;
-        public static final int INTAKE = 10;
-        public static final int SPIT = 10;
+        public static final double INTAKE = -0.5;
+        public static final double SPIT = 0.5;
+        public static final double IDLE = 0;
     }
 }

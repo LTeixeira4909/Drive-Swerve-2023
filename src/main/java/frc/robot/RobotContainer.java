@@ -44,12 +44,13 @@ public class RobotContainer {
 
   // private final XboxController m_controller = new XboxController(0);
   private final CommandXboxController m_driver = new CommandXboxController(0);
-  //private final CommandXboxController m_operator = new CommandXboxController(1);
+  // private final CommandXboxController m_operator = new
+  // CommandXboxController(1);
 
   private final DrivetrainSubsystem m_drivetrainSubsystem = DrivetrainSubsystem.getInstance();
-  //public static final CubeShooter m_cubeShooterSubsystem = new CubeShooter();
-  
- public static final Arm m_ArmSubsystem = new Arm();
+  // public static final CubeShooter m_cubeShooterSubsystem = new CubeShooter();
+
+  public static final Arm m_ArmSubsystem = new Arm();
 
   public static final Intake m_IntakeSubsystem = new Intake();
 
@@ -119,15 +120,21 @@ public class RobotContainer {
    */
   private void configureButtonBindings() {
     // m_driver.leftTrigger()
-    //     .onTrue(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.INTAKE)))
-    //     .onFalse(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.RETRACTED)));
+    // .onTrue(new InstantCommand(() ->
+    // m_cubeShooterSubsystem.setState(CubeShooterStates.INTAKE)))
+    // .onFalse(new InstantCommand(() ->
+    // m_cubeShooterSubsystem.setState(CubeShooterStates.RETRACTED)));
     // m_driver.b().onTrue(new BalanceCommand());
     // m_operator.povLeft()
-    //     .onTrue(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.SCOREHIGH)))
-    //     .onFalse(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.RETRACTED)));
+    // .onTrue(new InstantCommand(() ->
+    // m_cubeShooterSubsystem.setState(CubeShooterStates.SCOREHIGH)))
+    // .onFalse(new InstantCommand(() ->
+    // m_cubeShooterSubsystem.setState(CubeShooterStates.RETRACTED)));
     // m_operator.povRight()
-    //     .onTrue(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.SCOREMID)))
-    //     .onFalse(new InstantCommand(() -> m_cubeShooterSubsystem.setState(CubeShooterStates.RETRACTED)));
+    // .onTrue(new InstantCommand(() ->
+    // m_cubeShooterSubsystem.setState(CubeShooterStates.SCOREMID)))
+    // .onFalse(new InstantCommand(() ->
+    // m_cubeShooterSubsystem.setState(CubeShooterStates.RETRACTED)));
 
     // Double square is back
     // 3 lines is start
@@ -150,6 +157,8 @@ public class RobotContainer {
         .onTrue(new InstantCommand(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.INTAKE)));
     m_driver.y()
         .onTrue(new InstantCommand(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SPIT)));
+    m_driver.b()
+        .onTrue(new InstantCommand(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.IDLE)));
   }
 
   /**
