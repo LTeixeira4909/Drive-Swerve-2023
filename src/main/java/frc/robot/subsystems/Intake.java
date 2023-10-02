@@ -43,7 +43,7 @@ public class Intake extends SubsystemBase {
         stateMachine();
 
         SmartDashboard.putString("intake/CurrentState", m_currentState.toString());
-        SmartDashboard.putNumber("currentLimit", m_currentLimit);
+        SmartDashboard.putNumber("intake/current", m_intakeRollers.getOutputCurrent());
     }
 
     private void stateMachine() {
