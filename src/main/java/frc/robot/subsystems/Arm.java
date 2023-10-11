@@ -44,12 +44,13 @@ public class Arm extends SubsystemBase {
     /** Creates a new Arm. */
     public Arm() {
         m_armPivot = new CANSparkMax(ArmConstants.ARM_MOTOR, MotorType.kBrushless);
-        //new PIDController(Constants.ArmConstants.kP,0, 0);
+        m_armPivot.setSmartCurrentLimit(40);
+        // new PIDController(Constants.ArmConstants.kP,0, 0);
         m_currentState = armStates.ARM_RETRACTED;
         m_armPivot.setInverted(false);
         m_armPivot.getPIDController().setP(Constants.ArmConstants.kP);
         m_armPivot.getPIDController().setOutputRange(-ArmConstants.OUTPUT_LIMIT,
-        ArmConstants.OUTPUT_LIMIT);
+                ArmConstants.OUTPUT_LIMIT);
 
     }
 

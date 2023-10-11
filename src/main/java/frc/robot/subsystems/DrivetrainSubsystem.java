@@ -233,7 +233,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
         setModuleStates(moduleStates);
     }
 
-    public static final double MAX_VELOCITY_METERS_PER_SECOND = 4;
+    public static final double MAX_VELOCITY_METERS_PER_SECOND = 0.5; // 4
     public static final double MAX_OMEGA_RADIANS_PER_SECOND = 2.5;
 
     public void setModuleStates(SwerveModuleState[] moduleStates) {

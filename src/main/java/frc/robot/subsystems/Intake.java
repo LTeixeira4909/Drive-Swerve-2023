@@ -21,6 +21,7 @@ public class Intake extends SubsystemBase {
     public Intake() {
         m_intakeRollers = new CANSparkMax(IntakeConstants.INTAKE_ROLLLERS, MotorType.kBrushless);
         m_currentState = IntakeStates.IDLE;
+        m_intakeRollers.setSmartCurrentLimit(40);
     }
 
     public enum IntakeStates {
@@ -42,6 +43,7 @@ public class Intake extends SubsystemBase {
     public void periodic() {
         stateMachine();
 
+        SmartDashboard.putNumber("m_rollerSpeeds", m_rollerSpeed);
         SmartDashboard.putString("intake/CurrentState", m_currentState.toString());
         SmartDashboard.putNumber("intake/current", m_intakeRollers.getOutputCurrent());
     }
