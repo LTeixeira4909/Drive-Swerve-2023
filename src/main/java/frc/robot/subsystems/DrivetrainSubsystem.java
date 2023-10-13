@@ -30,16 +30,16 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // private static DrivetrainSubsystem instance = null;
 
     // double wheelBase = 31.625 * 0.0254;
-    double wheelBase = 20.0 * 0.0254;
+    private double wheelBase = 20.0 * 0.0254;
     // Locations for the swerve drive modules relative to the robot center.
-    Translation2d m_frontLeftLocation = new Translation2d(wheelBase, wheelBase);
-    Translation2d m_frontRightLocation = new Translation2d(wheelBase, -wheelBase);
-    Translation2d m_backLeftLocation = new Translation2d(-wheelBase, wheelBase);
-    Translation2d m_backRightLocation = new Translation2d(-wheelBase, -wheelBase);
-    Field2d field = new Field2d();
+    private Translation2d m_frontLeftLocation = new Translation2d(wheelBase, wheelBase);
+    private Translation2d m_frontRightLocation = new Translation2d(wheelBase, -wheelBase);
+    private Translation2d m_backLeftLocation = new Translation2d(-wheelBase, wheelBase);
+    private Translation2d m_backRightLocation = new Translation2d(-wheelBase, -wheelBase);
+    private Field2d field = new Field2d();
 
     // Creating my kinematics object using the module locations
-    SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
+    private SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(
             m_frontLeftLocation,
             m_frontRightLocation,
             m_backLeftLocation,
@@ -48,9 +48,9 @@ public class DrivetrainSubsystem extends SubsystemBase {
     // Creating my odometry object from the kinematics object. Here,
     // our starting pose is 5 meters along the long end of the field and in the
     // center of the field along the short end, facing forward.
-    SwerveDriveOdometry m_odometry;
+    private SwerveDriveOdometry m_odometry;
 
-    Pose2d m_pose;
+    private Pose2d m_pose;
 
     Joystick js0 = new Joystick(0);
 
@@ -120,22 +120,6 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
         SmartDashboard.putBoolean("Done", false);
     }
-
-    // private DrivetrainSubsystem() {
-    // drivetrainTab = Shuffleboard.getTab("drivetrain");
-
-    // }
-
-    // public static DrivetrainSubsystem getInstance() {
-    // if (instance == null) {
-    // instance = new DrivetrainSubsystem();
-    // }
-    // return instance;
-    // }
-
-    // public ShuffleboardTab getTab() {
-    // return drivetrainTab;
-    // }
 
     // this is alled every loop of the scheduler (~20ms)
     @Override
