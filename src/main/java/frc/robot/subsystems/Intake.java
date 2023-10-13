@@ -27,7 +27,8 @@ public class Intake extends SubsystemBase {
     public enum IntakeStates {
         INTAKE("Intake"),
         SPIT("Spit"),
-        IDLE("Idle");
+        IDLE("Idle"),
+        HYBRID("Hybrid");
 
         private String nameOfState;
 
@@ -63,6 +64,10 @@ public class Intake extends SubsystemBase {
 
             case IDLE:
                 m_rollerSpeed = IntakeConstants.IDLE;
+                break;
+
+            case HYBRID:
+                m_rollerSpeed = IntakeConstants.HYBRID;
                 break;
         }
 

@@ -60,9 +60,10 @@ public final class Constants {
     // ---------------------------------------------------------------\\
 
     public class IntakeConstants {
-        public static final int INTAKE_ROLLLERS = 1;
+        public static final int INTAKE_ROLLLERS = 1; // fix this
         public static final double INTAKE = -1;
         public static final double SPIT = 1;
         public static final double IDLE = 0;
+        public static final double HYBRID = 0; // fix setpoints and speed
     }
 }
