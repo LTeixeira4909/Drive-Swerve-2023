@@ -91,8 +91,9 @@ public class RobotContainer {
     addAutoPath("simple charge station");
     addAutoPath("double score charge station");
     addAutoPath("double score charge station HP");
-    m_chooser.setDefaultOption("Default Auto",
-        m_drivetrainSubsystem.traj(PathPlanner.loadPath("1 Meter Path", new PathConstraints(4, 3)), true));
+    m_chooser.setDefaultOption("", Commands.none());
+    //m_chooser.setDefaultOption("Default Auto",
+      //  m_drivetrainSubsystem.traj(PathPlanner.loadPath("1 Meter Path", new PathConstraints(4, 3)), true));
     SmartDashboard.putData(m_chooser);
 
   }
@@ -210,3 +211,4 @@ public class RobotContainer {
   }
 
 }
+

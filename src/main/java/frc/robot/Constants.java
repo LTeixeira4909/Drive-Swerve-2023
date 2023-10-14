@@ -47,13 +47,13 @@ public final class Constants {
     public static final class ArmConstants {
         public static final int ARM_MOTOR = 2;
 
-        public static final double ARM_RETRACTED = 0.571;
+        public static final double ARM_RETRACTED = 1.7;
         public static final double ARM_EXTENDED = 0;
-        public static final double ARM_MID = 19.2;
-        public static final double ARM_HIGH = 17.0;
-        public static final double ARM_SPIT = 35.0;
+        public static final double ARM_MID = 23.0;
+        public static final double ARM_HIGH = 15.8;
+        public static final double ARM_SPIT = 36.0;
         public static final double ARM_CALIBRATE = 0;
-        public static final double ARM_HYBRID = 0.571;
+        public static final double ARM_HYBRID = 1.7;
         public static final double kP = 0.08;
         public static final double OUTPUT_LIMIT = 0.3;
     }
