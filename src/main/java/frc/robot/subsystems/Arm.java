@@ -28,7 +28,8 @@ public class Arm extends SubsystemBase {
         ARM_EXTENDED("Extended"), // picking cube up off the floor
         ARM_MID("Mid"), // eject a cube at the floor level for the hybrid node
         ARM_HIGH("High"),
-        ARM_SPIT("Spit");
+        ARM_SPIT("Spit"),
+        ARM_HYBRID("Hybrid");
 
         String stateName;
 
@@ -45,12 +46,12 @@ public class Arm extends SubsystemBase {
     public Arm() {
         m_armPivot = new CANSparkMax(ArmConstants.ARM_MOTOR, MotorType.kBrushless);
         m_armPivot.setSmartCurrentLimit(40);
-        // new PIDController(Constants.ArmConstants.kP,0, 0);
         m_currentState = armStates.ARM_RETRACTED;
         m_armPivot.setInverted(false);
         m_armPivot.getPIDController().setP(Constants.ArmConstants.kP);
         m_armPivot.getPIDController().setOutputRange(-ArmConstants.OUTPUT_LIMIT,
                 ArmConstants.OUTPUT_LIMIT);
+        m_armPivot.getEncoder().setPosition(0);
 
     }
 
@@ -86,6 +87,9 @@ public class Arm extends SubsystemBase {
                 break;
             case ARM_SPIT:
                 m_angleSetpoint = ArmConstants.ARM_SPIT;
+                break;
+            case ARM_HYBRID:
+                m_angleSetpoint = ArmConstants.ARM_HYBRID;
                 break;
 
         }

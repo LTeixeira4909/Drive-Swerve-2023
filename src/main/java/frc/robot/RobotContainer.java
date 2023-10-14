@@ -25,6 +25,7 @@ import frc.robot.subsystems.Intake.IntakeStates;
 import frc.robot.Constants.CubeShooterConstants;
 import frc.robot.commands.BalanceCommand;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
@@ -143,19 +144,41 @@ public class RobotContainer {
     m_driver.back()
         .onTrue(new InstantCommand(() -> m_drivetrainSubsystem.zeroGyro()));
     m_driver.rightTrigger()
-        .onTrue(new InstantCommand(() -> m_ArmSubsystem.setArmState(armStates.ARM_RETRACTED)));
+        .onTrue(Commands.sequence(
+            Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_SPIT)),
+            Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.INTAKE))))
+        .onFalse(Commands.sequence(
+            Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_RETRACTED)),
+            Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.IDLE))));
+    // .onTrue(new InstantCommand(() ->
+    // m_ArmSubsystem.setArmState(armStates.ARM_RETRACTED)));
     m_driver.rightBumper()
         .onTrue(new InstantCommand(() -> m_ArmSubsystem.setArmState(armStates.ARM_HIGH)));
     m_driver.leftBumper()
-        .onTrue(new InstantCommand(() -> m_ArmSubsystem.setArmState(armStates.ARM_MID)));
+        .onTrue(Commands.sequence(
+            Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_MID)),
+            Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SPIT))))
+        .onFalse(Commands.sequence(
+            Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_RETRACTED)),
+            Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.IDLE))));
+
     m_driver.leftTrigger()
-        .onTrue(new InstantCommand(() -> m_ArmSubsystem.setArmState(armStates.ARM_SPIT)));
+        .onTrue(Commands.sequence(
+            Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_HYBRID)),
+            Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SPIT))))
+        .onFalse(Commands.sequence(
+            Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_RETRACTED)),
+            Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.IDLE))));
+    // .onTrue(new InstantCommand(() ->
+    // m_ArmSubsystem.setArmState(armStates.ARM_SPIT)));
     m_driver.x()
         .onTrue(new InstantCommand(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.INTAKE)));
     m_driver.y()
         .onTrue(new InstantCommand(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SPIT)));
     m_driver.b()
         .onTrue(new InstantCommand(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.IDLE)));
+    m_driver.a()
+        .onTrue(new InstantCommand(() -> m_ArmSubsystem.setArmState(armStates.ARM_RETRACTED)));
   }
 
   /**
