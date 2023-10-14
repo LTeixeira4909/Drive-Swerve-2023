@@ -212,7 +212,8 @@ public class RobotContainer {
     // PathConstraints(4, 3)), true);
 
     return Commands.sequence(
-      Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SLOWINTAKE)),
+      Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SLOWINTAKE
+      )),
       Commands.waitSeconds(1),
       Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_MID)),
       Commands.waitSeconds(2),
