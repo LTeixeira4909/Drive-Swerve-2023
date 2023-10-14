@@ -150,32 +150,46 @@ public class RobotContainer {
             Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.INTAKE))))
         .onFalse(Commands.sequence(
             Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_RETRACTED)),
-            Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.IDLE))));
+            Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SLOWINTAKE))));
     // .onTrue(new InstantCommand(() ->
     // m_ArmSubsystem.setArmState(armStates.ARM_RETRACTED)));
     m_driver.rightBumper()
         .onTrue(new InstantCommand(() -> m_ArmSubsystem.setArmState(armStates.ARM_HIGH)));
     m_driver.leftBumper()
-        .onTrue(Commands.sequence(
-            Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_MID)),
-            Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SPIT))))
-        .onFalse(Commands.sequence(
-            Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_RETRACTED)),
-            Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.IDLE))));
+        .onTrue(
+          Commands.parallel(
+            new InstantCommand(() -> m_ArmSubsystem.setArmState(armStates.ARM_MID)),
+            Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SLOWINTAKE))));   
+    
+    
+        // .onTrue(Commands.sequence(
+        //     Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_MID)),
+        //     Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SPIT))))
+        // .onFalse(Commands.sequence(
+        //     Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_RETRACTED)),
+        //     Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.IDLE))));
 
     m_driver.leftTrigger()
-        .onTrue(Commands.sequence(
-            Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_HYBRID)),
-            Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SPIT))))
-        .onFalse(Commands.sequence(
-            Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_RETRACTED)),
-            Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.IDLE))));
+    .onTrue(Commands.sequence(
+      Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_HYBRID)),
+      Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SPIT))))
+  .onFalse(Commands.sequence(
+      Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_RETRACTED)),
+      Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.IDLE))));  
+   
+   
+   
+        
     // .onTrue(new InstantCommand(() ->
     // m_ArmSubsystem.setArmState(armStates.ARM_SPIT)));
-    m_driver.x()
-        .onTrue(new InstantCommand(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.INTAKE)));
+    // m_driver.x()
+    //     .onTrue(new InstantCommand(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.INTAKE)));
     m_driver.y()
-        .onTrue(new InstantCommand(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SPIT)));
+    .onTrue(Commands.sequence(
+      Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SPIT))))
+  .onFalse(Commands.sequence(
+      Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_RETRACTED)),
+      Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.IDLE))));
     m_driver.b()
         .onTrue(new InstantCommand(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.IDLE)));
     m_driver.a()
@@ -197,18 +211,15 @@ public class RobotContainer {
     // return m_drivetrainSubsystem.traj(PathPlanner.loadPath("Rotate 90 Path", new
     // PathConstraints(4, 3)), true);
 
-    return m_chooser.getSelected();
-  }
-
-  public String getSelectedAuto() {
-    // String autoName = m_chooser.getSelected().getName();
-    Command autoCmd = m_chooser.getSelected();
-    if (autoCmd == null) {
-      return "No Auto Selected";
-    } else {
-      return autoCmd.getName();
+    return Commands.sequence(
+      Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SLOWINTAKE)),
+      Commands.waitSeconds(1),
+      Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_MID)),
+      Commands.waitSeconds(2),
+      Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.SPIT)),
+      Commands.waitSeconds(2),
+      Commands.runOnce(() -> m_IntakeSubsystem.setIntakeState(IntakeStates.IDLE)),
+      Commands.runOnce(() -> m_ArmSubsystem.setArmState(armStates.ARM_RETRACTED)));
     }
-  }
-
 }
 

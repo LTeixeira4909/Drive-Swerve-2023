@@ -49,19 +49,19 @@ public final class Constants {
 
         public static final double ARM_RETRACTED = 1.7;
         public static final double ARM_EXTENDED = 0;
-        public static final double ARM_MID = 23.0;
+        public static final double ARM_MID = 19.3;
         public static final double ARM_HIGH = 15.8;
         public static final double ARM_SPIT = 36.0;
         public static final double ARM_CALIBRATE = 0;
         public static final double ARM_HYBRID = 1.7;
         public static final double kP = 0.08;
-        public static final double OUTPUT_LIMIT = 0.3;
+        public static final double OUTPUT_LIMIT = 0.6;
     }
     // ---------------------------------------------------------------\\
 
     public class IntakeConstants {
         public static final int INTAKE_ROLLLERS = 1; // fix this
-        public static final double INTAKE = -1;
+        public static final double INTAKE = -0.8;
         public static final double SPIT = 1;
         public static final double IDLE = 0;
         public static final double HYBRID = 0; // fix setpoints and speed

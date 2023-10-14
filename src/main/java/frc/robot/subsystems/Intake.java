@@ -28,7 +28,9 @@ public class Intake extends SubsystemBase {
         INTAKE("Intake"),
         SPIT("Spit"),
         IDLE("Idle"),
-        HYBRID("Hybrid");
+        HYBRID("Hybrid"), 
+        SLOWINTAKE("");
+
 
         private String nameOfState;
 
@@ -68,6 +70,9 @@ public class Intake extends SubsystemBase {
 
             case HYBRID:
                 m_rollerSpeed = IntakeConstants.HYBRID;
+                break;
+            case SLOWINTAKE:
+                m_rollerSpeed = -0.1;
                 break;
         }
 
